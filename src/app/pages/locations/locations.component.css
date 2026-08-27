@@ -1,0 +1,70 @@
+.locations-page { background: #f8f5ef; color: #1b1b1b; }
+.locations-hero { padding: 11rem 0 4rem; background: #1b1b1b; color: #fff; }
+.locations-hero h1 { margin: .35rem 0 .75rem; color: #fff; font-size: clamp(2.4rem, 5vw, 4.5rem); }
+.locations-hero p:last-child { max-width: 38rem; margin: 0; color: #ded8ce; }
+.locations-kicker { margin: 0; color: #eb0029; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.locations-content { padding: 0 0 5rem; }
+.location-tabs { display: flex; gap: .75rem; margin-bottom: 1.5rem; border-bottom: 1px solid #d9d2c7; }
+.location-tabs button { padding: .85rem 1rem; border: 0; border-bottom: 3px solid transparent; background: transparent; color: #53504b; font: inherit; font-weight: 800; }
+.location-tabs button.is-active, .location-tabs button:hover, .location-tabs button:focus-visible { border-color: #eb0029; color: #1b1b1b; outline: none; }
+.locations-layout { position: relative; display: grid; gap: 1.5rem; align-items: start; }
+.map-fullscreen-trigger { position: absolute; top: .85rem; right: .85rem; z-index: 5; display: inline-flex; padding: .7rem .9rem; align-items: center; gap: .5rem; border: 0; border-radius: .55rem; background: #1b1b1b; color: #fff; font-weight: 800; box-shadow: 0 .35rem 1rem rgb(0 0 0 / 22%); }
+.map-fullscreen-trigger:hover, .map-fullscreen-trigger:focus-visible { background: #eb0029; outline: 2px solid #fff; }
+.map-fullscreen-modal { position: fixed; inset: 0; z-index: 100000; padding: 1.25rem; background: #fff; }
+.map-fullscreen-shell { display: grid; width: 100%; height: 100%; grid-template-rows: auto minmax(0, 1fr); gap: 1rem; }
+.map-fullscreen-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.fullscreen-location-tabs { display: flex; padding: .3rem; gap: .35rem; border-radius: .7rem; background: #f1ece7; }
+.fullscreen-location-tabs button { min-height: 42px; padding: .55rem 1rem; border: 0; border-radius: .5rem; background: transparent; color: #57504b; font-weight: 800; }
+.fullscreen-location-tabs button.is-active { background: #eb0029; color: #fff; box-shadow: 0 .25rem .8rem rgb(235 0 41 / 20%); }
+.map-fullscreen-content { min-height: 0; overflow: hidden; border: 1px solid #d9d2c7; border-radius: 1rem; background: #e7e1d7; }
+.map-fullscreen-modal .map-panel { position: relative; top: 0; width: 100%; height: 100%; min-height: 0; border: 0; border-radius: 0; }
+.map-fullscreen-modal .map-canvas,
+.map-fullscreen-modal .locations-map { height: 100%; }
+.map-fullscreen-close { z-index: 100003; display: inline-flex; padding: .75rem 1rem; align-items: center; gap: .5rem; border: 0; border-radius: .55rem; background: #eb0029; color: #fff; font-weight: 800; box-shadow: 0 .35rem 1rem rgb(0 0 0 / 25%); }
+.map-fullscreen-close:hover, .map-fullscreen-close:focus-visible { background: #1b1b1b; outline: 2px solid #fff; }
+.map-panel { position: sticky; top: 1rem; overflow: hidden; min-height: 32rem; border: 1px solid #d9d2c7; border-radius: 1rem; background: #e7e1d7; }
+.map-canvas { position: relative; height: 32rem; }
+.locations-map { display: block; width: 100%; height: 32rem; border: 0; }
+.marker-rail { position: absolute; inset: 0; pointer-events: none; }
+.map-marker { position: absolute; z-index: 1; width: 2rem; height: 2rem; transform: translate(-50%, -50%); pointer-events: auto; }
+.map-marker-pin { width: 2rem; height: 2rem; padding: 0; border: 0; border-radius: 50%; background: #f6c343; color: #1b1b1b; box-shadow: 0 .3rem .75rem rgb(0 0 0 / 28%); font: inherit; }
+.map-marker-pin i { font-size: 1rem; }
+.map-marker.is-selected, .map-marker:hover, .map-marker:focus-within { z-index: 2; }
+.map-marker.is-selected .map-marker-pin, .map-marker:hover .map-marker-pin, .map-marker:focus-within .map-marker-pin { background: #eb0029; color: #fff; outline: 2px solid #fff; outline-offset: 2px; }
+.map-marker-tooltip { position: absolute; bottom: calc(100% + .6rem); left: 50%; display: none; width: 13rem; border-radius: .5rem; background: #1b1b1b; color: #fff; font-size: .75rem; line-height: 1.25; text-align: left; transform: translateX(-50%); }
+.map-marker-tooltip::after { position: absolute; bottom: -.35rem; left: 50%; width: .7rem; height: .7rem; background: #1b1b1b; content: ''; transform: translateX(-50%) rotate(45deg); }
+.map-marker.tooltip-below .map-marker-tooltip { top: calc(100% + .6rem); bottom: auto; }
+.map-marker.tooltip-below .map-marker-tooltip::after { top: -.35rem; bottom: auto; }
+.map-marker.tooltip-align-left .map-marker-tooltip { left: -.25rem; transform: none; }
+.map-marker.tooltip-align-left .map-marker-tooltip::after { left: 1.25rem; }
+.map-marker.tooltip-align-right .map-marker-tooltip { right: -.25rem; left: auto; transform: none; }
+.map-marker.tooltip-align-right .map-marker-tooltip::after { right: .9rem; left: auto; }
+.map-marker-tooltip strong, .map-marker-tooltip span { position: relative; z-index: 1; display: block; }
+.map-marker-tooltip img { position: relative; z-index: 1; display: block; width: 100%; height: 6.5rem; border-radius: .5rem .5rem 0 0; object-fit: cover; }
+.map-marker-tooltip-copy { padding: .6rem .7rem; }
+.directions-button { display: flex !important; align-items: center; justify-content: center; gap: .35rem; margin-top: .55rem; padding: .5rem .6rem; border-radius: .35rem; background: #eb0029; color: #fff; font-size: .75rem; font-weight: 800; text-decoration: none; }
+.directions-button:hover, .directions-button:focus-visible { background: #fff; color: #eb0029; outline: 2px solid #eb0029; }
+.map-marker:hover .map-marker-tooltip, .map-marker:focus-within .map-marker-tooltip, .map-marker.is-selected .map-marker-tooltip { display: block; }
+.marker-label-rail { position: absolute; right: .75rem; bottom: .75rem; left: .75rem; z-index: 3; display: flex; flex-wrap: wrap; gap: .4rem; padding: .55rem; background: rgb(27 27 27 / 88%); }
+.marker-label-rail button { padding: .4rem .55rem; border: 1px solid transparent; border-radius: 999px; background: #fff; color: #1b1b1b; font: inherit; font-size: .75rem; font-weight: 700; }
+.marker-label-rail button i { margin-right: .2rem; color: #eb0029; }
+.marker-label-rail button:hover, .marker-label-rail button:focus-visible, .marker-label-rail button.is-selected { border-color: #eb0029; background: #eb0029; color: #fff; outline: 2px solid #fff; outline-offset: 1px; }
+.marker-label-rail button:hover i, .marker-label-rail button:focus-visible i, .marker-label-rail button.is-selected i { color: #fff; }
+@media (max-width: 991px) { .map-panel { position: relative; top: 0; } .map-fullscreen-trigger { display: none; } }
+@media (max-width: 575px) {
+  .locations-hero { padding-top: 8rem; }
+  .locations-content { padding: 1rem 0 3.5rem; }
+  .locations-content .container { display: flex; flex-direction: column; }
+  .location-tabs { order: 2; gap: .5rem; margin: 1rem 0 .75rem; border: 0; }
+  .location-tabs button { flex: 1; padding: .75rem .4rem; border: 1px solid #d9d2c7; border-radius: .65rem; background: #fff; font-size: .8rem; line-height: 1.2; }
+  .location-tabs button.is-active, .location-tabs button:hover, .location-tabs button:focus-visible { border-color: #eb0029; background: #eb0029; color: #fff; }
+  .locations-layout { display: contents; }
+  .map-panel { display: contents; }
+  .map-canvas { order: 1; overflow: hidden; width: 100%; height: 50svh; min-height: 18rem; max-height: 28rem; border: 1px solid #d9d2c7; border-radius: .85rem; background: #e7e1d7; }
+  .locations-map { width: 100%; height: 100%; min-height: 0; }
+  .marker-label-rail { position: static; order: 3; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; padding: 0; background: transparent; }
+  .marker-label-rail button { min-height: 2.7rem; padding: .55rem .65rem; border-color: #d9d2c7; border-radius: .65rem; text-align: left; }
+  .marker-label-rail button:hover, .marker-label-rail button:focus-visible, .marker-label-rail button.is-selected { outline-color: #f8f5ef; }
+  .map-marker-tooltip { width: 9.5rem; }
+  .map-marker-tooltip img { height: 4.75rem; }
+}

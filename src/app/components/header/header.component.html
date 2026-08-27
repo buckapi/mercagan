@@ -1,0 +1,183 @@
+    <!-- Header Section Start -->
+    <header class="header-section-2">
+        <div class="black-bg"></div>
+        <div class="red-bg"></div>
+        <div class="container-fluid">
+            <div class="main-header-wrapper-2">
+                <div class="logo-image">
+                    <a routerLink="/">
+                        <img src="assets/img/logo/logo.svg" alt="img">
+                    </a>
+                </div>
+                <div class="main-header-items">
+                    <div class="header-top-wrapper-2">
+                        <div class="text-white top-text"><span class="header-tagline-year">Desde 1999</span>, la mejor carne a la parrilla de Santander</div>
+                        <button type="button" class="text-white top-text header-location" (click)="openLocationSelector()" aria-label="Cambiar sede seleccionada">
+                            <i class="fa-solid fa-location-dot me-3" aria-hidden="true"></i>
+                            {{ branchService.selectedBranch().address }}
+                        </button>
+                        <div class="social-icon d-flex align-items-center">
+                            <a routerLink="/login" class="text-white pe-2 top-text" aria-label="Iniciar sesión o registrarse"><i class="fa-solid fa-user me-3"></i> Iniciar sesión / Registrarse</a>
+                            <span class="text-white top-text">Síguenos:</span>
+                            <a href="index-2.html#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="index-2.html#"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                    <div id="header-sticky" class="header-2">
+                        <div class="mega-menu-wrapper">
+                            <div class="header-main">
+                                <div class="logo">
+                                    <a routerLink="/" class="header-logo">
+                                        <img src="assets/img/logo/logo.svg" alt="logo-img">
+                                    </a>
+                                </div>
+                                <div class="header-left">
+                                    <div class="mean__menu-wrapper">
+                                        <div class="main-menu">
+                                            <nav id="mobile-menu">
+                                                <ul>
+                                                    <li class="has-dropdown active menu-thumb">
+                                                        <a routerLink="/">
+                                                            Inicio
+                                                          
+                                                        </a>
+                                                       
+                                                    </li>
+                                                   
+                                                    <li class="has-dropdown">
+                                                        <a routerLink="/about">
+                                                            Nosotros
+                                                           
+                                                        </a>
+                                                      
+                                                    </li>
+                                                    <li>
+                                                        <a routerLink="/menu">
+                                                            Menú
+                                                          
+                                                        </a>
+                                                   
+                                                    </li>
+                                                   
+                                                 
+                                                   <li>
+    <a href="#" (click)="$event.preventDefault()">
+        Sucursales
+        <i class="fa-regular fa-plus"></i>
+    </a>
+
+    <ul class="submenu">
+        <li>
+            <a href="#">
+                Bucaramanga y Santander
+                <i class="fa-regular fa-plus"></i>
+            </a>
+
+            <ul class="submenu">
+                <li><button type="button" (click)="branchService.selectAndOpen('carrera-33')">Carrera 33</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('san-pio')">San Pío</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-megamall')">C.C. Megamall</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cabecera-cuarta-etapa')">Cabecera - Cuarta Etapa</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-cacique')">C.C. Cacique</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('canaveral-carrera-26')">Canaveral - Carrera 26</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-canaveral-express')">C.C. Canaveral Express</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-de-la-cuesta')">C.C. De La Cuesta</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-acropolis')">C.C. Acrópolis</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-el-puente-san-gil')">C.C. El Puente - San Gil</button></li>
+            </ul>
+        </li>
+
+        <li>
+            <a href="#">
+                Bogotá
+                <i class="fa-regular fa-plus"></i>
+            </a>
+
+            <ul class="submenu">
+                <li><button type="button" (click)="branchService.selectAndOpen('cc-el-eden')">C.C. El Edén</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('pepe-sierra')">Pepe Sierra</button></li>
+                <li><button type="button" (click)="branchService.selectAndOpen('zona-g')">Zona G</button></li>
+            </ul>
+        </li>
+    </ul>
+</li>
+                                                    <li>
+                                                        <a routerLink="/ubicaciones">Ubícanos en el mapa</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="header-right d-flex justify-content-end align-items-center">
+                                    <a href="index-2.html#0" class="search-trigger search-icon"><i class="fal fa-search"></i></a>
+
+                                    <div class="header__cart">
+                                        <a routerLink="/cart" [attr.data-cart-count]="cartService.totalItems()" [attr.aria-label]="'Abrir carrito, ' + cartService.totalItems() + (cartService.totalItems() === 1 ? ' producto' : ' productos')"> <i class="fa-sharp fa-regular fa-cart-shopping"></i> </a>
+                                        <div class="header__right__dropdown__wrapper">
+                                            @if (cartService.items().length === 0) {
+                                                <div class="header-cart-empty">
+                                                    <i class="fa-regular fa-cart-shopping" aria-hidden="true"></i>
+                                                    <p>Tu carrito está vacío.</p>
+                                                    <a routerLink="/menu">Ver menú</a>
+                                                </div>
+                                            } @else {
+                                                <div class="header__right__dropdown__inner">
+                                                    @for (item of cartService.items(); track item.product.id) {
+                                                        <div class="single__header__right__dropdown">
+                                                            <div class="header__right__dropdown__img">
+                                                                <a routerLink="/cart"><img loading="lazy" [src]="item.product.image" [alt]="item.product.name"></a>
+                                                            </div>
+                                                            <div class="header__right__dropdown__content">
+                                                                <a routerLink="/cart">{{ item.product.name }}</a>
+                                                                <p>{{ item.quantity }} x <span class="price">{{ item.product.price * item.quantity }}$</span></p>
+                                                            </div>
+                                                            <div class="header__right__dropdown__close">
+                                                                <button type="button" [attr.aria-label]="'Eliminar ' + item.product.name + ' del carrito'" (click)="removeFromCart(item.product)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </div>
+                                                <p class="dropdown__price">Total: <span>{{ cartService.total() }}$</span></p>
+                                                <div class="header__right__dropdown__button">
+                                                    <a routerLink="/cart" class="theme-btn mb-2">Ver carrito ({{ cartService.totalItems() }})</a>
+                                                    <a routerLink="/checkout" class="theme-btn style3">Finalizar pedido</a>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <a class="theme-btn" routerLink="/menu">PEDIR AHORA <i
+                                            class="fa-sharp fa-regular fa-arrow-right"></i></a>
+                                    <div class="header__hamburger d-xl-block my-auto">
+                                        <button type="button" class="sidebar__toggle" aria-label="Abrir panel de sedes" (click)="branchService.open()">
+                                            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                                        </button>
+                                        <button
+                                            type="button"
+                                            class="mobile-menu-toggle"
+                                            [attr.aria-expanded]="mobileMenuOpen()"
+                                            aria-controls="header-mobile-navigation"
+                                            aria-label="Abrir menú principal"
+                                            (click)="toggleMobileMenu()">
+                                            <i class="fa-solid fa-bars" aria-hidden="true"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <nav
+                                id="header-mobile-navigation"
+                                class="header-mobile-navigation"
+                                [class.is-open]="mobileMenuOpen()"
+                                aria-label="Navegación móvil">
+                                <a routerLink="/" (click)="closeMobileMenu()">Inicio</a>
+                                <a routerLink="/about" (click)="closeMobileMenu()">Nosotros</a>
+                                <a routerLink="/menu" (click)="closeMobileMenu()">Menú</a>
+                                <a routerLink="/ubicaciones" (click)="closeMobileMenu()">Ubícanos en el mapa</a>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>

@@ -1,0 +1,75 @@
+.checkout-content { min-height: 55vh; background: #f8f5f2; }
+.checkout-intro { margin: 0 0 1.75rem; }
+.checkout-intro > p, .order-section-heading p { margin: 0 0 .3rem; color: #eb0029; font-size: .7rem; font-weight: 800; letter-spacing: .12em; }
+.checkout-intro h1 { margin: 0 0 .35rem; color: #28211d; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.checkout-intro > span { color: #716963; font-size: .9rem; }
+.checkout-intro strong { color: #28211d; }
+.checkout-success { margin: 0 0 1.5rem; padding: .9rem 1rem; border-left: 3px solid #2d8b57; background: #eef9f2; color: #286841; font-size: .9rem; }
+.checkout-success i { margin-right: .45rem; }
+.checkout-empty { padding: 4rem 1rem; background: #fff; text-align: center; }
+.checkout-empty > i { color: #eb0029; font-size: 3rem; }
+.checkout-empty h1 { margin: 1rem 0 .5rem; font-size: clamp(1.7rem, 4vw, 2.4rem); }
+.checkout-empty p { margin-bottom: 1.5rem; color: #716963; }
+
+.checkout-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(260px, .75fr); gap: 1.5rem; align-items: start; }
+.checkout-panel, .order-section, .payment-section { border: 1px solid #e8e0da; background: #fff; box-shadow: 0 8px 24px rgb(34 28 24 / 5%); }
+.checkout-panel { padding: 1.75rem; }
+.checkout-panel h2, .payment-section h2 { margin: 0 0 1.35rem; color: #28211d; font-size: 1.3rem; }
+.form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.form-grid label { display: grid; gap: .42rem; color: #4e4540; font-size: .8rem; font-weight: 800; }
+.form-grid .form-full { grid-column: 1 / -1; }
+.form-grid input, .form-grid textarea { width: 100%; padding: .8rem .85rem; border: 1px solid #ddd3cc; border-radius: 3px; background: #fff; color: #28211d; font: inherit; font-size: .9rem; font-weight: 400; outline-color: #eb0029; resize: vertical; }
+.form-grid input::placeholder, .form-grid textarea::placeholder { color: #a49a94; }
+.delivery-panel { position: sticky; top: 140px; }
+.branch-summary { display: flex; padding: 1rem; align-items: flex-start; gap: .75rem; border: 1px solid #eed7d9; background: #fff5f5; }
+.branch-summary > i { margin-top: .1rem; color: #eb0029; }
+.branch-summary div { display: grid; gap: .15rem; }
+.branch-summary strong { color: #28211d; font-size: .9rem; }
+.branch-summary span, .delivery-panel > p { color: #716963; font-size: .8rem; line-height: 1.5; }
+.delivery-panel > p { margin: 1rem 0 .65rem; }
+.delivery-panel > a, .order-section-heading > a { color: #eb0029; font-size: .83rem; font-weight: 800; }
+
+.order-section { margin-top: 1.5rem; }
+.order-section-heading { display: flex; padding: 1.5rem 1.75rem; align-items: end; justify-content: space-between; gap: 1rem; border-bottom: 1px solid #e8e0da; }
+.order-section-heading h2 { margin: 0; color: #28211d; font-size: 1.35rem; }
+.order-table { width: 100%; border-collapse: collapse; }
+.order-table th { padding: .95rem 1.75rem; background: #f6f1ed; color: #655b55; font-size: .7rem; letter-spacing: .05em; text-align: left; text-transform: uppercase; }
+.order-table th:not(:first-child), .order-table td:not(:first-child) { text-align: center; }
+.order-table td { padding: 1rem 1.75rem; border-bottom: 1px solid #eee8e4; color: #514842; font-size: .88rem; vertical-align: middle; }
+.order-product { display: flex; align-items: center; gap: .85rem; color: #28211d; text-align: left; }
+.order-product img { width: 52px; height: 52px; border-radius: 6px; background: #f7f3f0; object-fit: contain; }
+.order-table tfoot th, .order-table tfoot td { padding: .75rem 1.75rem; border-bottom: 1px solid #eee8e4; background: #fff; color: #514842; font-size: .85rem; text-align: right; text-transform: none; }
+.order-table tfoot td { color: #28211d; font-weight: 700; }
+.order-table .order-total th, .order-table .order-total td { border-bottom: 0; background: #1b1b1b; color: #fff; font-size: 1.05rem; font-weight: 800; }
+.order-table .order-total td { color: #eb0029; font-size: 1.2rem; }
+
+.payment-section { margin-top: 1.5rem; padding: 1.75rem; }
+.payment-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 1.5rem; gap: .8rem; }
+.payment-option { display: flex; min-height: 92px; padding: .85rem; align-items: flex-start; gap: .6rem; border: 1px solid #ded5ce; cursor: pointer; }
+.payment-option:has(input:checked) { border-color: #eb0029; background: #fff5f5; box-shadow: inset 0 0 0 1px #eb0029; }
+.payment-option input { margin-top: .2rem; accent-color: #eb0029; }
+.payment-option span { display: grid; gap: .25rem; }
+.payment-option strong { color: #28211d; font-size: .84rem; }
+.payment-option small { color: #7b716b; font-size: .72rem; line-height: 1.35; }
+.place-order { border: 0; }
+.place-order i { margin-left: .45rem; }
+
+@media (max-width: 991px) { .checkout-grid { grid-template-columns: 1fr; } .delivery-panel { position: static; } }
+@media (max-width: 767px) {
+  .checkout-content.section-padding { padding: 3rem 0; }
+  .checkout-panel, .payment-section { padding: 1.2rem; }
+  .form-grid, .payment-options { grid-template-columns: 1fr; }
+  .order-section-heading { padding: 1.2rem; }
+  .order-table thead { display: none; }
+  .order-table, .order-table tbody, .order-table tr, .order-table td { display: block; width: 100%; }
+  .order-table tbody tr { padding: .9rem 1.2rem; border-bottom: 1px solid #eee8e4; }
+  .order-table td { display: flex; padding: .3rem 0; justify-content: space-between; border: 0; text-align: right !important; }
+  .order-table td::before { color: #837871; font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; content: attr(data-title); }
+  .order-table td:first-child { display: block; padding: 0 0 .6rem; text-align: left !important; }
+  .order-table td:first-child::before { display: none; }
+  .order-table tfoot, .order-table tfoot tr, .order-table tfoot th, .order-table tfoot td { display: block; width: 100%; }
+  .order-table tfoot tr { display: flex; padding: .75rem 1.2rem; justify-content: space-between; border-bottom: 1px solid #eee8e4; }
+  .order-table tfoot th, .order-table tfoot td { padding: 0; border: 0; }
+  .order-table .order-total { background: #1b1b1b; }
+  .order-table .order-total th, .order-table .order-total td { background: transparent; }
+}

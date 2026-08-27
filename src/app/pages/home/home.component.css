@@ -1,0 +1,62 @@
+@media (max-width: 767px) {
+  .chefe-card-wrap .row {
+    flex-wrap: nowrap;
+    margin-right: -.75rem;
+    margin-left: -.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .chefe-card-wrap .row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chefe-card-wrap .row > [class*="col-"] {
+    flex: 0 0 84%;
+    max-width: 84%;
+    scroll-snap-align: center;
+  }
+
+  .banner-wrapper.style2 {
+    background-image: url('/assets/img/bg/bannerBG1_1.jpg');
+  }
+
+  .banner-wrapper.style2 .banner-style1 {
+    padding: 1.25rem 0 .25rem;
+  }
+
+  .banner-wrapper.style2 .section-title {
+    padding: 0;
+  }
+
+  /* Un poco más de aire entre los textos y el botón en pantallas pequeñas. */
+  .banner-wrapper.style2 .section-title .sub-title {
+    margin-bottom: .5rem;
+  }
+
+  .banner-wrapper.style2 .section-title .title {
+    font-size: 40px;
+    line-height: 1.15;
+    margin-bottom: 3.25rem;
+  }
+
+  .banner-wrapper.style2 .banner-thumb-area {
+    width: 100%;
+    margin-top: -.35rem;
+    padding: 0 .75rem 2rem;
+  }
+
+  .banner-wrapper.style2 .banner-thumb-area > img {
+    width: min(100%, 340px);
+    max-height: 250px;
+  }
+
+  .banner2-slider .swiper-pagination {
+    top: auto;
+    bottom: .75rem;
+    left: 50%;
+    width: auto;
+    transform: translateX(-50%);
+  }
+}

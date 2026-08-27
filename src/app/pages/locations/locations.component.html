@@ -1,0 +1,130 @@
+<main class="locations-page">
+
+
+  <section class="locations-content" aria-labelledby="locations-heading">
+    <div class="container">
+      <h2 id="locations-heading" class="visually-hidden">Sedes Mercagan</h2>
+      <div class="location-tabs" role="tablist" aria-label="Grupos de sedes">
+        @for (group of groups; track group) {
+          <button
+            type="button"
+            role="tab"
+            [id]="'tab-' + $index"
+            [attr.aria-selected]="activeGroup() === group"
+            [attr.aria-controls]="'locations-panel-' + $index"
+            [class.is-active]="activeGroup() === group"
+            (click)="selectGroup(group)">
+            {{ group }}
+          </button>
+        }
+      </div>
+
+      <div
+        class="locations-layout"
+        role="tabpanel"
+        [id]="'locations-panel-' + (activeGroup() === groups[0] ? 0 : 1)"
+        [attr.aria-labelledby]="'tab-' + (activeGroup() === groups[0] ? 0 : 1)">
+        <button type="button" class="map-fullscreen-trigger" aria-label="Abrir mapa en pantalla completa" (click)="openFullscreenMap()">
+          <i class="fa-solid fa-expand" aria-hidden="true"></i>
+          Pantalla completa
+        </button>
+        <ng-container [ngTemplateOutlet]="mapSection"></ng-container>
+      </div>
+
+      <ng-template #mapSection>
+        <div class="map-panel">
+          <div class="map-canvas">
+            <iframe
+              class="locations-map"
+              [src]="mapUrl()"
+              [title]="'Mapa de la sede Mercagan ' + branchService.selectedBranch().name"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <div class="marker-rail" aria-label="Selector de sedes en el mapa">
+              @for (branch of visibleBranches(); track branch.id) {
+                <div
+                  class="map-marker"
+                  [class.is-selected]="branchService.selectedBranch().id === branch.id"
+                  [class.tooltip-below]="markerPosition($index).top < 45"
+                  [class.tooltip-align-left]="markerPosition($index).left <= 20"
+                  [class.tooltip-align-right]="markerPosition($index).left >= 80"
+                  [style.left.%]="markerPosition($index).left"
+                  [style.top.%]="markerPosition($index).top">
+                  <button
+                    type="button"
+                    class="map-marker-pin"
+                    [attr.aria-pressed]="branchService.selectedBranch().id === branch.id"
+                    [attr.aria-label]="'Ver sede ' + branch.name + ' en el mapa'"
+                    (click)="selectBranch(branch)">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                  </button>
+                  <span class="map-marker-tooltip">
+                    <img
+                      [src]="branch.image"
+                      [alt]="'Sede Mercagan ' + branch.name"
+                      loading="lazy">
+                    <span class="map-marker-tooltip-copy">
+                      <strong>{{ branch.name }}</strong>
+                      <span>{{ branch.address }}</span>
+                      <a
+                        class="directions-button"
+                        [href]="directionsUrl(branch)"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        [attr.aria-label]="'Cómo llegar a la sede ' + branch.name">
+                        <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>
+                        Cómo llegar
+                      </a>
+                    </span>
+                  </span>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="marker-label-rail" aria-label="Etiquetas de sedes">
+            @for (branch of visibleBranches(); track branch.id) {
+              <button
+                type="button"
+                [class.is-selected]="branchService.selectedBranch().id === branch.id"
+                [attr.aria-pressed]="branchService.selectedBranch().id === branch.id"
+                (click)="selectBranch(branch)"
+                (mouseenter)="selectBranch(branch)"
+                (focus)="selectBranch(branch)">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                {{ branch.name }}
+              </button>
+            }
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+</main>
+
+@if (fullscreenMapOpen()) {
+  <div class="map-fullscreen-modal" role="dialog" aria-modal="true" aria-label="Mapa de sucursales en pantalla completa">
+    <div class="map-fullscreen-shell">
+      <div class="map-fullscreen-header">
+        <div class="fullscreen-location-tabs" role="tablist" aria-label="Región de las sedes">
+          @for (group of groups; track group) {
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="activeGroup() === group"
+              [class.is-active]="activeGroup() === group"
+              (click)="selectGroup(group)">
+              {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+            </button>
+          }
+        </div>
+        <button type="button" class="map-fullscreen-close" aria-label="Cerrar mapa en pantalla completa" (click)="closeFullscreenMap()">
+          <i class="fa-solid fa-compress" aria-hidden="true"></i>
+          Cerrar
+        </button>
+      </div>
+      <div class="map-fullscreen-content">
+        <ng-container [ngTemplateOutlet]="mapSection"></ng-container>
+      </div>
+    </div>
+  </div>
+}

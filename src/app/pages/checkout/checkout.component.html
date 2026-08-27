@@ -1,0 +1,88 @@
+<main class="checkout-page">
+  <section class="checkout-content section-padding fix">
+    <div class="container">
+      @if (cartService.items().length === 0) {
+        <section class="checkout-empty" aria-labelledby="checkout-empty-title">
+          <i class="fa-regular fa-cart-shopping" aria-hidden="true"></i>
+          <h1 id="checkout-empty-title">Tu carrito está vacío</h1>
+          <p>Agrega productos al carrito para continuar con tu pedido.</p>
+          <a routerLink="/menu" class="theme-btn">Ver menú <i class="fa-sharp fa-regular fa-arrow-right" aria-hidden="true"></i></a>
+        </section>
+      } @else {
+        <div class="checkout-intro">
+          <p>FINALIZAR PEDIDO</p>
+          <h1>Completa tus datos</h1>
+          <span>Estás haciendo tu pedido en <strong>{{ branchService.selectedBranch().name }}</strong></span>
+        </div>
+
+        @if (orderSubmitted()) {
+          <p class="checkout-success" role="status"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Recibimos tu solicitud. Nos comunicaremos contigo para confirmar el pedido.</p>
+        }
+
+        <form class="checkout-form" (submit)="submitOrder($event)">
+          <div class="checkout-grid">
+            <section class="checkout-panel" aria-labelledby="customer-details-title">
+              <h2 id="customer-details-title">Datos de facturación y entrega</h2>
+              <div class="form-grid">
+                <label>Nombre completo<input type="text" name="name" autocomplete="name" required></label>
+                <label>Teléfono<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
+                <label class="form-full">Correo electrónico<input type="email" name="email" autocomplete="email" required></label>
+                <label class="form-full">Dirección de entrega<input type="text" name="address" autocomplete="street-address" placeholder="Barrio, calle, número y referencias" required></label>
+                <label>Ciudad<input type="text" name="city" autocomplete="address-level2" required></label>
+                <label>Complemento de dirección<input type="text" name="addressDetail" autocomplete="address-line2" placeholder="Apto, casa, torre, etc."></label>
+                <label class="form-full">Notas para tu pedido<textarea name="notes" rows="4" placeholder="Indicaciones para la entrega o preparación del pedido."></textarea></label>
+              </div>
+            </section>
+
+            <aside class="checkout-panel delivery-panel" aria-labelledby="delivery-title">
+              <h2 id="delivery-title">Entrega</h2>
+              <div class="branch-summary">
+                <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                <div><strong>{{ branchService.selectedBranch().name }}</strong><span>{{ branchService.selectedBranch().address }}</span></div>
+              </div>
+              <p>Confirmaremos la disponibilidad y el costo de entrega para esta dirección antes de procesar el pago.</p>
+              <a routerLink="/ubicaciones">Cambiar sede</a>
+            </aside>
+          </div>
+
+          <section class="order-section" aria-labelledby="order-title">
+            <div class="order-section-heading">
+              <div><p>RESUMEN</p><h2 id="order-title">Tu pedido</h2></div>
+              <a routerLink="/cart">Editar carrito</a>
+            </div>
+            <div class="order-table-wrapper">
+              <table class="order-table">
+                <thead><tr><th scope="col">Producto</th><th scope="col">Precio</th><th scope="col">Cantidad</th><th scope="col">Total</th></tr></thead>
+                <tbody>
+                  @for (item of cartService.items(); track item.product.id) {
+                    <tr>
+                      <td data-title="Producto"><div class="order-product"><img [src]="item.product.image" [alt]="item.product.name"><strong>{{ item.product.name }}</strong></div></td>
+                      <td data-title="Precio">{{ item.product.price }}$</td>
+                      <td data-title="Cantidad">{{ item.quantity }}</td>
+                      <td data-title="Total"><strong>{{ item.product.price * item.quantity }}$</strong></td>
+                    </tr>
+                  }
+                </tbody>
+                <tfoot>
+                  <tr><th colspan="3">Subtotal</th><td>{{ cartService.total() }}$</td></tr>
+                  <tr><th colspan="3">Entrega</th><td>A confirmar</td></tr>
+                  <tr class="order-total"><th colspan="3">Total</th><td>{{ cartService.total() }}$</td></tr>
+                </tfoot>
+              </table>
+            </div>
+          </section>
+
+          <section class="payment-section" aria-labelledby="payment-title">
+            <h2 id="payment-title">Método de pago</h2>
+            <div class="payment-options">
+              <label class="payment-option"><input type="radio" name="payment" value="cash" checked><span><strong>Pago contra entrega</strong><small>Paga al recibir tu pedido.</small></span></label>
+              <label class="payment-option"><input type="radio" name="payment" value="transfer"><span><strong>Transferencia bancaria</strong><small>Recibirás los datos de pago al confirmar el pedido.</small></span></label>
+              <label class="payment-option"><input type="radio" name="payment" value="online"><span><strong>Pago en línea</strong><small>Te enviaremos un enlace seguro para pagar.</small></span></label>
+            </div>
+            <button type="submit" class="theme-btn place-order">Enviar solicitud de pedido <i class="fa-sharp fa-regular fa-arrow-right" aria-hidden="true"></i></button>
+          </section>
+        </form>
+      }
+    </div>
+  </section>
+</main>

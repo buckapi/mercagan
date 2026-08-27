@@ -1,0 +1,26 @@
+html {
+  scroll-behavior: smooth;
+}
+
+app-root,
+app-preloader,
+app-back-to-top,
+app-sidebar,
+app-header,
+app-search-modal,
+app-footer,
+app-home,
+app-about,
+app-menu-shop {
+  display: block;
+}
+
+/* Angular replaces the template's body, so keep this initial loading state hidden. */
+#preloader {
+  display: none !important;
+}
+
+.search-wrap.is-open {
+  display: block;
+  opacity: 1;
+}

@@ -1,0 +1,86 @@
+<main class="cart-page bg-white">
+  <section class="cart-content section-padding fix">
+    <div class="container">
+      @if (cartService.items().length === 0) {
+        <section class="empty-cart" aria-labelledby="empty-cart-title">
+          <i class="fa-regular fa-cart-shopping" aria-hidden="true"></i>
+          <h1 id="empty-cart-title">Tu carrito está vacío</h1>
+          <p>Agrega tus platos favoritos desde el menú.</p>
+          <a routerLink="/menu" class="theme-btn">Ver menú <i class="fa-sharp fa-regular fa-arrow-right" aria-hidden="true"></i></a>
+        </section>
+      } @else {
+        <p class="cart-notice" role="status"><i class="fa-solid fa-circle-info" aria-hidden="true"></i> Revisa tu pedido antes de continuar.</p>
+
+        <section class="cart-table-wrapper" aria-labelledby="cart-title">
+          <div class="cart-title-row">
+            <div>
+              <p class="cart-eyebrow">TU PEDIDO</p>
+              <h1 id="cart-title">Carrito de compras</h1>
+            </div>
+            <span>{{ cartService.totalItems() }} {{ cartService.totalItems() === 1 ? 'producto' : 'productos' }}</span>
+          </div>
+
+          <table class="cart-table">
+            <thead>
+              <tr>
+                <th scope="col">Producto</th>
+                <th scope="col">Precio</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Total</th>
+                <th scope="col"><span class="visually-hidden">Eliminar</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of cartService.items(); track item.product.id) {
+                <tr>
+                  <td data-title="Producto">
+                    <div class="cart-product">
+                      <img [src]="item.product.image" [alt]="item.product.name">
+                      <div>
+                        <h2>{{ item.product.name }}</h2>
+                        <p>{{ item.product.shortDescription }}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td data-title="Precio"><span class="cart-amount">{{ item.product.price }}$</span></td>
+                  <td data-title="Cantidad">
+                    <div class="quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + item.product.name">
+                      <button type="button" [attr.aria-label]="'Disminuir cantidad de ' + item.product.name" (click)="changeQuantity(item.product, -1)"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
+                      <span aria-live="polite">{{ item.quantity }}</span>
+                      <button type="button" [attr.aria-label]="'Aumentar cantidad de ' + item.product.name" (click)="changeQuantity(item.product, 1)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
+                    </div>
+                  </td>
+                  <td data-title="Total"><strong class="cart-amount">{{ item.product.price * item.quantity }}$</strong></td>
+                  <td class="cart-remove-cell">
+                    <button type="button" class="remove-item" [attr.aria-label]="'Eliminar ' + item.product.name" (click)="remove(item.product)"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+
+          <div class="cart-actions">
+            <a routerLink="/menu" class="continue-shopping"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Seguir comprando</a>
+          </div>
+        </section>
+
+        <div class="cart-bottom-row">
+          <div class="coupon-box">
+            <h2>¿Tienes un cupón?</h2>
+            <p>Ingresa tu código de descuento en el siguiente paso.</p>
+          </div>
+          <aside class="cart-summary" aria-labelledby="summary-title">
+            <h2 id="summary-title">Total del carrito</h2>
+            <dl>
+              <div><dt>Subtotal</dt><dd>{{ cartService.total() }}$</dd></div>
+              <div><dt>Entrega</dt><dd>A confirmar</dd></div>
+              <div class="summary-total"><dt>Total</dt><dd>{{ cartService.total() }}$</dd></div>
+            </dl>
+            <p class="summary-note">Los costos de entrega se confirmarán durante el proceso de pago.</p>
+            <a routerLink="/checkout" class="theme-btn checkout-button">Continuar al pago <i class="fa-sharp fa-regular fa-arrow-right" aria-hidden="true"></i></a>
+          </aside>
+        </div>
+      }
+    </div>
+  </section>
+</main>

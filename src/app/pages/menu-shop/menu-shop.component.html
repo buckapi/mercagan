@@ -1,0 +1,556 @@
+    <!-- Shop Section S T A R T -->
+    <div class="shop-section section-padding fix" [class.ribbon-is-hidden]="ribbonHidden()">
+        <div class="shop-wrapper style1">
+            <div class="container">
+                <div class="desktop-shop-ribbon" [class.is-scrolled]="ribbonScrolled()" [class.is-hidden]="ribbonHidden()">
+                    <button type="button" class="selected-location" (click)="openLocationModal()">
+                        <span class="selected-location-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                        <span class="selected-location-copy">
+                            <small>Estás comprando en</small>
+                            <strong>{{ branchService.selectedBranch().name }}</strong>
+                            <span>{{ branchService.selectedBranch().group }}</span>
+                        </span>
+                        <span class="selected-location-change">Cambiar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+                    </button>
+                    <p class="ribbon-result-count">Mostrando 1 - 12 de 30 resultados</p>
+                    <div class="ribbon-view-selector" role="group" aria-label="Vista de productos">
+                        <button type="button" [class.is-active]="productView() === 'grid'" [attr.aria-pressed]="productView() === 'grid'" aria-label="Vista en cuadrícula" (click)="productView.set('grid')"><i class="fa-solid fa-grid" aria-hidden="true"></i></button>
+                        <button type="button" [class.is-active]="productView() === 'list'" [attr.aria-pressed]="productView() === 'list'" aria-label="Vista en lista" (click)="productView.set('list')"><i class="fa-solid fa-list" aria-hidden="true"></i></button>
+                    </div>
+                    <button
+                        type="button"
+                        class="ribbon-visibility-toggle"
+                        [attr.aria-expanded]="!ribbonHidden()"
+                        [attr.aria-label]="ribbonHidden() ? 'Mostrar cintillo' : 'Ocultar cintillo'"
+                        (click)="toggleRibbon()">
+                        <i class="fa-solid" [class.fa-chevron-up]="!ribbonHidden()" [class.fa-chevron-down]="ribbonHidden()" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="mobile-location-row">
+                    <button type="button" class="selected-location" (click)="openLocationModal()">
+                        <span class="selected-location-icon"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span>
+                        <span class="selected-location-copy">
+                            <small>Estás comprando en</small>
+                            <strong>{{ branchService.selectedBranch().name }}</strong>
+                            <span>{{ branchService.selectedBranch().group }}</span>
+                        </span>
+                        <span class="selected-location-change">Cambiar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+                    </button>
+                    <button type="button" class="mobile-toolbar-filter" [attr.aria-expanded]="filtersOpen()" aria-label="Abrir filtros" (click)="toggleFilters()">
+                        <i class="fa-solid fa-sliders" aria-hidden="true"></i>
+                    </button>
+                    <label class="mobile-toolbar-sort" aria-label="Ordenar productos">
+                        <i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i>
+                        <select aria-label="Ordenar productos">
+                            <option value="menu_order">Orden predeterminado</option>
+                            <option value="popularity">Más populares</option>
+                            <option value="rating">Mejor calificados</option>
+                            <option value="date">Más recientes</option>
+                            <option value="price">Precio: menor a mayor</option>
+                            <option value="price-desc">Precio: mayor a menor</option>
+                        </select>
+                    </label>
+                </div>
+                <nav class="mobile-category-carousel" aria-label="Categorías del menú">
+                    @for (category of categories(); track category) {
+                        <button type="button" [class.is-active]="selectedCategory() === category" (click)="selectedCategory.set(category)">{{ category }}</button>
+                    }
+                </nav>
+                <div class="row">
+                    <div class="col-xl-3 col-lg-4 order-2 order-md-1 wow fadeInUp menu-filters-column" [class.mobile-filters-open]="filtersOpen()" [class.desktop-filters-collapsed]="desktopFiltersCollapsed()" data-wow-delay=".3s">
+                        <button
+                            type="button"
+                            class="desktop-filters-collapse"
+                            [attr.aria-expanded]="!desktopFiltersCollapsed()"
+                            [attr.aria-label]="desktopFiltersCollapsed() ? 'Mostrar filtros' : 'Ocultar filtros'"
+                            (click)="toggleDesktopFilters()">
+                            <i class="fa-solid" [class.fa-chevron-left]="!desktopFiltersCollapsed()" [class.fa-chevron-right]="desktopFiltersCollapsed()" aria-hidden="true"></i>
+                        </button>
+                        <button type="button" class="mobile-filters-close" aria-label="Cerrar filtros" (click)="closeFilters()"><i class="fa-solid fa-xmark"></i></button>
+                        <div class="main-sidebar">
+                            <div class="single-sidebar-widget">
+                                <h5 class="widget-title">
+                                    Buscar
+                                </h5>
+                                <div class="search-widget">
+                                    <form action="shop.html#">
+                                        <input type="text" placeholder="Buscar aquí">
+                                        <button><i class="fa-light fa-magnifying-glass"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="single-sidebar-widget">
+                                <h5 class="widget-title">
+                                    Categorías
+                                </h5>
+                                <ul class="tagcloud">
+                                    @for (category of categories(); track category) {
+                                        <li><button type="button" [class.is-active]="selectedCategory() === category" (click)="selectedCategory.set(category); closeFilters()">{{ category }}</button></li>
+                                    }
+                                </ul>
+                            </div>
+                            <div class="single-sidebar-widget">
+                                <h5 class="widget-title">
+                                    Filtrar por precio
+                                </h5>
+                                <div class="range__barcustom">
+                                    <div class="slider">
+                                        <div class="progress" style="left: 15.29%; right: 58.9%;"></div>
+                                    </div>
+                                    <div class="range-input">
+                                        <input type="range" class="range-min" min="0" max="10000" value="2500">
+                                        <input type="range" class="range-max" min="100" max="10000" value="7500">
+                                    </div>
+                                    <div class="range-items">
+                                        <div class="price-input">
+                                            <div class="price-wrapper d-flex align-items-center gap-1">
+                                                <div class="field">
+                                                    <span>Precio:</span>
+                                                </div>
+                                                <div class="field">
+                                                    <span>$</span>
+                                                    <input type="number" class="input-min" value="100">
+                                                </div>
+                                                <div class="separators">-</div>
+                                                <div class="field">
+                                                    <span>$</span>
+                                                    <input type="number" class="input-max" value="1000">
+                                                </div>
+                                                <a routerLink="/menu" class="filter-btn mt-2 me-3">Filtrar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="single-sidebar-widget">
+                                <h5 class="widget-title">
+                                    Productos destacados
+                                </h5>
+
+                                <div class="recent-box">
+                                    <div class="recent-thumb">
+                                        <img src="assets/img/shop/recentThumb1_1.png" alt="menu-thumb">
+                                    </div>
+                                    <div class="recent-content">
+                                        <a routerLink="/menu"> Pan con carne en rodajas </a>
+                                        <div class="star"><img src="assets/img/icon/star3.svg" alt="icon"></div>
+                                        <div class="price">
+                                            <div class="regular-price">35$</div>
+                                            <div class="offer-price">25$</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recent-box">
+                                    <div class="recent-thumb">
+                                        <img src="assets/img/shop/recentThumb1_2.png" alt="menu-thumb">
+                                    </div>
+                                    <div class="recent-content">
+                                        <a routerLink="/menu"> Combo de comida rápida </a>
+                                        <div class="star"><img src="assets/img/icon/star3.svg" alt="icon"></div>
+                                        <div class="price">
+                                            <div class="regular-price">95$</div>
+                                            <div class="offer-price">75$</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recent-box">
+                                    <div class="recent-thumb">
+                                        <img src="assets/img/shop/recentThumb1_3.png" alt="menu-thumb">
+                                    </div>
+                                    <div class="recent-content">
+                                        <a routerLink="/menu"> Ensalada deliciosa </a>
+                                        <div class="star"><img src="assets/img/icon/star3.svg" alt="icon"></div>
+                                        <div class="price">
+                                            <div class="regular-price">65$</div>
+                                            <div class="offer-price">55$</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="recent-box">
+                                    <div class="recent-thumb">
+                                        <img src="assets/img/shop/recentThumb1_4.png" alt="menu-thumb">
+                                    </div>
+                                    <div class="recent-content">
+                                        <a routerLink="/menu"> Pasta china </a>
+                                        <div class="star"><img src="assets/img/icon/star3.svg" alt="icon"></div>
+                                        <div class="price">
+                                            <div class="regular-price">45$</div>
+                                            <div class="offer-price">35$</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-9 col-lg-8 order-1 order-md-2 wow fadeInUp menu-catalog-column" [class.desktop-catalog-expanded]="desktopFiltersCollapsed()" data-wow-delay=".5s">
+                        <div class="sort-bar">
+                            <div class="row g-sm-0 gy-20 justify-content-between align-items-center">
+                                <div class="col-md">
+                                    <p class="woocommerce-result-count">Mostrando 1 - 12 de 30 resultados</p>
+                                </div>
+
+                                <div class="col-md-auto">
+                                    <form class="woocommerce-ordering" method="get">
+                                        <select name="orderby" class="single-select" aria-label="Ordenar productos">
+                                            <option value="menu_order" selected="selected">Orden predeterminado</option>
+                                            <option value="popularity">Ordenar por popularidad</option>
+                                            <option value="rating">Ordenar por calificación</option>
+                                            <option value="date">Ordenar por más recientes</option>
+                                            <option value="price">Precio: menor a mayor</option>
+                                            <option value="price-desc">Precio: mayor a menor</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <div class="col-md-auto">
+                                    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="pills-grid-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-grid" type="button" role="tab"
+                                                aria-controls="pills-grid" aria-selected="true"><i
+                                                    class="fa-solid fa-grid"></i></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="pills-list-tab" data-bs-toggle="pill"
+                                                data-bs-target="#pills-list" type="button" role="tab"
+                                                aria-controls="pills-list" aria-selected="false"><i
+                                                    class="fa-solid fa-list"></i></button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade" [class.show]="productView() === 'grid'" [class.active]="productView() === 'grid'" id="pills-grid" role="tabpanel"
+                                aria-labelledby="pills-grid-tab" tabindex="0">
+                                <ng-template #productCards>
+                                    @for (product of visibleProducts(); track product.id) {
+                                        <div class="dishes-card style2 wow fadeInUp product-card-enter" [attr.data-wow-delay]="product.delay" [style.--product-delay]="product.delay">
+                                            <div class="dishes-thumb">
+                                                <img [src]="product.image" [alt]="product.name">
+                                                <div class="circle-shape"><img class="cir36" src="assets/img/food-items/circleShape.png" alt=""></div>
+                                            </div>
+                                            <div class="dishes-content">
+                                                <div class="product-title-row">
+                                                    <a href="shop-details.html" (click)="$event.preventDefault(); openQuickView(product)"><h3>{{ product.name }}</h3></a>
+                                                    <button type="button" class="quick-view-icon-button" aria-label="Vista rápida" title="Vista rápida" (click)="openQuickView(product)">
+                                                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="star"><img src="assets/img/icon/star2.svg" alt="Calificación"></div>
+                                                <div class="text">{{ product.shortDescription }}</div>
+                                                <h6>{{ product.price }}$</h6>
+                                                @if ((productQuantities()[product.id] ?? 0) === 0) {
+                                                    <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
+                                                } @else {
+                                                    <div class="quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + product.name">
+                                                        <button type="button" class="quantity-button" [attr.aria-label]="'Disminuir cantidad de ' + product.name" (click)="changeQuantity(product, -1)">−</button>
+                                                        <span class="quantity-value" aria-live="polite">{{ productQuantities()[product.id] }}</span>
+                                                        <button type="button" class="quantity-button" [attr.aria-label]="'Aumentar cantidad de ' + product.name" (click)="changeQuantity(product, 1)">+</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </ng-template>
+                                @if (desktopFiltersCollapsed()) {
+                                    <div class="dishes-card-wrap style2 products-grid-five">
+                                        <ng-container [ngTemplateOutlet]="productCards"></ng-container>
+                                    </div>
+                                } @else {
+                                    <div class="dishes-card-wrap style2 products-grid-four">
+                                        <ng-container [ngTemplateOutlet]="productCards"></ng-container>
+                                    </div>
+                                }
+                            </div>
+                            <div class="tab-pane fade" [class.show]="productView() === 'list'" [class.active]="productView() === 'list'" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab"
+                                tabindex="0">
+                                <div class="dishes-card-wrap style3">
+                                    @for (product of visibleProducts(); track product.id) {
+                                        <div class="dishes-card style4">
+                                            <div class="dishes-thumb">
+                                                <img [src]="product.image" [alt]="product.name">
+                                                <div class="circle-shape"><img class="cir36" src="assets/img/food-items/circleShape.png" alt=""></div>
+                                            </div>
+                                            <div class="dishes-content">
+                                                <div class="product-title-row">
+                                                    <a href="shop-details.html" (click)="$event.preventDefault(); openQuickView(product)"><h3>{{ product.name }}</h3></a>
+                                                    <button type="button" class="quick-view-icon-button" aria-label="Vista rápida" (click)="openQuickView(product)"><i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+                                                </div>
+                                                <div class="star"><img src="assets/img/icon/star2.svg" alt="Calificación"></div>
+                                                <div class="text">{{ product.shortDescription }}</div>
+                                                <h6>{{ product.price }}$</h6>
+                                                @if ((productQuantities()[product.id] ?? 0) === 0) {
+                                                    <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
+                                                } @else {
+                                                    <div class="quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + product.name">
+                                                        <button type="button" class="quantity-button" [attr.aria-label]="'Disminuir cantidad de ' + product.name" (click)="changeQuantity(product, -1)">−</button>
+                                                        <span class="quantity-value" aria-live="polite">{{ productQuantities()[product.id] }}</span>
+                                                        <button type="button" class="quantity-button" [attr.aria-label]="'Aumentar cantidad de ' + product.name" (click)="changeQuantity(product, 1)">+</button>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    @if (false) {
+                                    <div class="dishes-card style4 wow fadeInUp" data-wow-delay="0.2s">
+                                        <div class="dishes-thumb">
+                                            <img src="assets/img/dishes/dishes2_1.png" alt="thumb">
+                                            <div class="circle-shape"><img class="cir36"
+                                                    src="assets/img/food-items/circleShape.png" alt="shape"></div>
+                                        </div>
+                                        <div class="dishes-content">
+                                            <a href="shop-details.html">
+                                                <h3>Pizza de pollo</h3>
+                                            </a>
+                                            <div class="icon">
+                                                <a href="shop.html#"> <i class="fa-regular fa-heart"></i></a>
+                                            </div>
+                                            <div class="star"><img src="assets/img/icon/star2.svg" alt="icon"></div>
+                                            <div class="text">Neque porro est qui dolorem ipsum quia quaed inventor
+                                                veritatis et
+                                                quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus
+                                                quis enim
+                                                var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is
+                                                simply
+                                                dummy text of the printing and typesetting industry.When an unknown
+                                                printer took
+                                                a galley of type</div>
+                                            <h6>$24.00</h6>
+                                            <a href="shop-details.html" class="theme-btn style6"> Pedir ahora <i
+                                                    class="fa-regular fa-basket-shopping"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="dishes-card style4 wow fadeInUp" data-wow-delay="0.4s">
+                                        <div class="dishes-thumb">
+                                            <img src="assets/img/dishes/dishes2_2.png" alt="thumb">
+                                            <div class="circle-shape"><img class="cir36"
+                                                    src="assets/img/food-items/circleShape.png" alt="shape"></div>
+                                        </div>
+                                        <div class="dishes-content">
+                                            <a href="shop-details.html">
+                                                <h3>Huevo con pepino</h3>
+                                            </a>
+                                            <div class="icon">
+                                                <a href="shop.html#"> <i class="fa-regular fa-heart"></i></a>
+                                            </div>
+                                            <div class="star"><img src="assets/img/icon/star2.svg" alt="icon"></div>
+                                            <div class="text">Neque porro est qui dolorem ipsum quia quaed inventor
+                                                veritatis et
+                                                quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus
+                                                quis enim
+                                                var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is
+                                                simply
+                                                dummy text of the printing and typesetting industry.When an unknown
+                                                printer took
+                                                a galley of type</div>
+                                            <h6>$28.00</h6>
+                                            <a href="shop-details.html" class="theme-btn style6"> Pedir ahora <i
+                                                    class="fa-regular fa-basket-shopping"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="dishes-card style4 wow fadeInUp" data-wow-delay="0.6s">
+                                        <div class="dishes-thumb">
+                                            <img src="assets/img/dishes/dishes2_3.png" alt="thumb">
+                                            <div class="circle-shape"><img class="cir36"
+                                                    src="assets/img/food-items/circleShape.png" alt="shape"></div>
+                                        </div>
+                                        <div class="dishes-content">
+                                            <a href="shop-details.html">
+                                                <h3>Arroz frito con pollo</h3>
+                                            </a>
+                                            <div class="icon">
+                                                <a href="shop.html#"> <i class="fa-regular fa-heart"></i></a>
+                                            </div>
+                                            <div class="star"><img src="assets/img/icon/star2.svg" alt="icon"></div>
+                                            <div class="text">Neque porro est qui dolorem ipsum quia quaed inventor
+                                                veritatis et
+                                                quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus
+                                                quis enim
+                                                var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is
+                                                simply
+                                                dummy text of the printing and typesetting industry.When an unknown
+                                                printer took
+                                                a galley of type</div>
+                                            <h6>$20.00</h6>
+                                            <a href="shop-details.html" class="theme-btn style6"> Pedir ahora <i
+                                                    class="fa-regular fa-basket-shopping"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="dishes-card style4 wow fadeInUp" data-wow-delay="0.8s">
+                                        <div class="dishes-thumb">
+                                            <img src="assets/img/dishes/dishes2_4.png" alt="thumb">
+                                            <div class="circle-shape"><img class="cir36"
+                                                    src="assets/img/food-items/circleShape.png" alt="shape"></div>
+                                        </div>
+                                        <div class="dishes-content">
+                                            <a href="shop-details.html">
+                                                <h3>Pierna de pollo</h3>
+                                            </a>
+                                            <div class="icon">
+                                                <a href="shop.html#"> <i class="fa-regular fa-heart"></i></a>
+                                            </div>
+                                            <div class="star"><img src="assets/img/icon/star2.svg" alt="icon"></div>
+                                            <div class="text">Neque porro est qui dolorem ipsum quia quaed inventor
+                                                veritatis et
+                                                quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus
+                                                quis enim
+                                                var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is
+                                                simply
+                                                dummy text of the printing and typesetting industry.When an unknown
+                                                printer took
+                                                a galley of type</div>
+                                            <h6>$58.00</h6>
+                                            <a href="shop-details.html" class="theme-btn style6"> Pedir ahora <i
+                                                    class="fa-regular fa-basket-shopping"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="dishes-card style4 wow fadeInUp" data-wow-delay="0.2s">
+                                        <div class="dishes-thumb">
+                                            <img src="assets/img/dishes/dishes2_1.png" alt="thumb">
+                                            <div class="circle-shape"><img class="cir36"
+                                                    src="assets/img/food-items/circleShape.png" alt="shape"></div>
+                                        </div>
+                                        <div class="dishes-content">
+                                            <a href="shop-details.html">
+                                                <h3>Pizza de pollo</h3>
+                                            </a>
+                                            <div class="icon">
+                                                <a href="shop.html#"> <i class="fa-regular fa-heart"></i></a>
+                                            </div>
+                                            <div class="star"><img src="assets/img/icon/star2.svg" alt="icon"></div>
+                                            <div class="text">Neque porro est qui dolorem ipsum quia quaed inventor
+                                                veritatis et
+                                                quasi architecto beatae vitae dicta sunt explicabo. Aelltes port lacus
+                                                quis enim
+                                                var sed efficitur turpis gilla sed sit amet finibus eros. Lorem Ipsum is
+                                                simply
+                                                dummy text of the printing and typesetting industry.When an unknown
+                                                printer took
+                                                a galley of type</div>
+                                            <h6>$24.00</h6>
+                                            <a href="shop-details.html" class="theme-btn style6"> Pedir ahora <i
+                                                    class="fa-regular fa-basket-shopping"></i></a>
+                                        </div>
+                                    </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="page-nav-wrap text-center">
+                            <ul>
+                                <li><a class="previous" routerLink="/menu"><i
+                                            class="fa-sharp fa-light fa-arrow-left-long"></i></a></li>
+                                <li><a class="page-numbers" routerLink="/menu">1</a></li>
+                                <li><a class="page-numbers active" routerLink="/menu">2</a></li>
+                                <li><a class="page-numbers" routerLink="/menu">3</a></li>
+                                <li><a class="page-numbers" routerLink="/menu">...</a></li>
+                                <li><a class="next" routerLink="/menu"><i
+                                            class="fa-sharp fa-light fa-arrow-right-long"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="mobile-filters-overlay" [class.is-open]="filtersOpen()" aria-label="Cerrar filtros" (click)="closeFilters()"></button>
+            </div>
+        </div>
+    </div>
+
+    @if (quickViewProduct(); as product) {
+        <div class="quick-view-backdrop" role="presentation" (click)="closeQuickView()">
+            <section class="quick-view-modal" role="dialog" aria-modal="true" aria-labelledby="quick-view-title" (click)="$event.stopPropagation()">
+                <button type="button" class="quick-view-close" aria-label="Cerrar vista rápida" (click)="closeQuickView()">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+                <div class="quick-view-image">
+                    <img [src]="product.image" [alt]="product.name">
+                </div>
+                <div class="quick-view-content">
+                    <p class="quick-view-eyebrow">DETALLE DEL PRODUCTO</p>
+                    <h2 id="quick-view-title">{{ product.name }}</h2>
+                    <p class="quick-view-description">{{ product.shortDescription }}</p>
+                    <p class="quick-view-price">{{ product.price }}$</p>
+                    @if ((productQuantities()[product.id] ?? 0) === 0) {
+                        <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
+                    } @else {
+                        <div class="quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + product.name">
+                            <button type="button" class="quantity-button" [attr.aria-label]="'Disminuir cantidad de ' + product.name" (click)="changeQuantity(product, -1)">−</button>
+                            <span class="quantity-value" aria-live="polite">{{ productQuantities()[product.id] }}</span>
+                            <button type="button" class="quantity-button" [attr.aria-label]="'Aumentar cantidad de ' + product.name" (click)="changeQuantity(product, 1)">+</button>
+                        </div>
+                    }
+                </div>
+            </section>
+        </div>
+    }
+
+    @if (locationModalOpen()) {
+        <div class="location-modal-backdrop" role="presentation">
+            <section class="location-modal" role="dialog" aria-modal="true" aria-labelledby="location-modal-title" aria-describedby="location-modal-description">
+                <div class="location-modal-brand"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></div>
+                <p class="location-modal-eyebrow">MENÚ SEGÚN TU UBICACIÓN</p>
+                <h2 id="location-modal-title">¿Dónde quieres pedir?</h2>
+                <p id="location-modal-description">Selecciona la sede que atenderá tu pedido para mostrarte los productos disponibles.</p>
+
+                <button type="button" class="gps-location-button" [disabled]="locating()" (click)="useCurrentLocation()">
+                    <i class="fa-solid" [class.fa-location-crosshairs]="!locating()" [class.fa-spinner]="locating()" [class.fa-spin]="locating()" aria-hidden="true"></i>
+                    {{ locating() ? 'Buscando la sede más cercana…' : 'Usar mi ubicación actual' }}
+                </button>
+
+                <div class="location-divider"><span>o selecciona una sede</span></div>
+                <div class="branch-tabs" role="tablist" aria-label="Región de la sucursal">
+                    @for (group of branchGroups; track group) {
+                        <button
+                            type="button"
+                            role="tab"
+                            [id]="'branch-tab-' + $index"
+                            [attr.aria-selected]="activeBranchGroup() === group"
+                            [attr.aria-controls]="'branch-panel-' + $index"
+                            [class.is-active]="activeBranchGroup() === group"
+                            (click)="selectBranchGroup(group)">
+                            {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+                        </button>
+                    }
+                </div>
+                <div class="branch-card-list" aria-label="Sucursales disponibles">
+                    @for (group of branchGroups; track group) {
+                        @if (activeBranchGroup() === group) {
+                            <section
+                                class="branch-card-group"
+                                role="tabpanel"
+                                [id]="'branch-panel-' + $index"
+                                [attr.aria-labelledby]="'branch-tab-' + $index">
+                                <div class="branch-card-grid">
+                                    @for (branch of branchesFor(group); track branch.id) {
+                                    <button
+                                        type="button"
+                                        class="branch-card"
+                                        [class.is-selected]="candidateBranchId() === branch.id"
+                                        [attr.aria-pressed]="candidateBranchId() === branch.id"
+                                        (click)="chooseCandidate(branch.id)">
+                                        <img class="branch-card-image" [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name" loading="lazy">
+                                        <span class="branch-card-copy">
+                                            <strong>{{ branch.name }}</strong>
+                                            <small>{{ branch.address }}</small>
+                                        </span>
+                                        <span class="branch-card-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
+                                    </button>
+                                    }
+                                </div>
+                            </section>
+                        }
+                    }
+                </div>
+
+                @if (locationError()) {
+                    <p class="location-error" role="alert"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> {{ locationError() }}</p>
+                }
+
+                <button type="button" class="confirm-location-button" (click)="confirmBranch()">Ver menú de esta sede</button>
+                <p class="location-privacy"><i class="fa-solid fa-lock" aria-hidden="true"></i> Solo usamos tu ubicación para encontrar la sede más cercana.</p>
+            </section>
+        </div>
+    }
+
+
