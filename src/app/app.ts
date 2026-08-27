@@ -61,17 +61,6 @@ export class App implements AfterViewInit, OnDestroy {
   private handleClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
 
-    if (target.closest('.search-trigger')) {
-      event.preventDefault();
-      this.document.querySelector<HTMLElement>('.search-wrap')?.classList.add('is-open');
-      this.document.querySelector<HTMLElement>('.main-search-input')?.focus();
-    }
-
-    if (target.closest('.search-close')) {
-      event.preventDefault();
-      this.document.querySelector<HTMLElement>('.search-wrap')?.classList.remove('is-open');
-    }
-
     if (target.closest('#back-top')) {
       event.preventDefault();
       this.document.defaultView?.scrollTo({ top: 0, behavior: 'smooth' });

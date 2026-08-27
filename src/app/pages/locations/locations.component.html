@@ -22,8 +22,8 @@
       <div
         class="locations-layout"
         role="tabpanel"
-        [id]="'locations-panel-' + (activeGroup() === groups[0] ? 0 : 1)"
-        [attr.aria-labelledby]="'tab-' + (activeGroup() === groups[0] ? 0 : 1)">
+        [id]="'locations-panel-' + groups.indexOf(activeGroup())"
+        [attr.aria-labelledby]="'tab-' + groups.indexOf(activeGroup())">
         <button type="button" class="map-fullscreen-trigger" aria-label="Abrir mapa en pantalla completa" (click)="openFullscreenMap()">
           <i class="fa-solid fa-expand" aria-hidden="true"></i>
           Pantalla completa
@@ -42,39 +42,18 @@
               referrerpolicy="no-referrer-when-downgrade"></iframe>
             <div class="marker-rail" aria-label="Selector de sedes en el mapa">
               @for (branch of visibleBranches(); track branch.id) {
-                <div
-                  class="map-marker"
-                  [class.is-selected]="branchService.selectedBranch().id === branch.id"
-                  [class.tooltip-below]="markerPosition($index).top < 45"
-                  [class.tooltip-align-left]="markerPosition($index).left <= 20"
-                  [class.tooltip-align-right]="markerPosition($index).left >= 80"
-                  [style.left.%]="markerPosition($index).left"
-                  [style.top.%]="markerPosition($index).top">
-                  <button
-                    type="button"
-                    class="map-marker-pin"
-                    [attr.aria-pressed]="branchService.selectedBranch().id === branch.id"
-                    [attr.aria-label]="'Ver sede ' + branch.name + ' en el mapa'"
-                    (click)="selectBranch(branch)">
-                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                  </button>
+                <div class="map-marker" [class.is-selected]="branchService.selectedBranch().id === branch.id" [class.tooltip-below]="markerPosition($index).top < 45" [class.tooltip-align-left]="markerPosition($index).left <= 20" [class.tooltip-align-right]="markerPosition($index).left >= 80" [style.left.%]="markerPosition($index).left" [style.top.%]="markerPosition($index).top">
+                  <button type="button" class="map-marker-pin" [attr.aria-pressed]="branchService.selectedBranch().id === branch.id" [attr.aria-label]="'Ver sede ' + branch.name + ' en el mapa'" (click)="selectBranch(branch)"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></button>
                   <span class="map-marker-tooltip">
-                    <img
-                      [src]="branch.image"
-                      [alt]="'Sede Mercagan ' + branch.name"
-                      loading="lazy">
+                    <img [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name" loading="lazy">
                     <span class="map-marker-tooltip-copy">
                       <strong>{{ branch.name }}</strong>
-                      <span>{{ branch.address }}</span>
-                      <a
-                        class="directions-button"
-                        [href]="directionsUrl(branch)"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        [attr.aria-label]="'Cómo llegar a la sede ' + branch.name">
-                        <i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>
-                        Cómo llegar
-                      </a>
+                      @if (branch.address) { <span>{{ branch.address }}</span> }
+                      <span class="map-marker-phones">
+                        @for (phone of branch.phones; track phone.value) { <a [href]="phone.telHref">{{ phone.display }}</a> }
+                      </span>
+                      @if (branch.whatsAppUrl) { <a class="location-whatsapp-link" [href]="branch.whatsAppUrl" target="_blank" rel="noopener noreferrer">WhatsApp</a> }
+                      <a class="directions-button" [href]="directionsUrl(branch)" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-diamond-turn-right" aria-hidden="true"></i>Cómo llegar</a>
                     </span>
                   </span>
                 </div>
@@ -113,7 +92,7 @@
               [attr.aria-selected]="activeGroup() === group"
               [class.is-active]="activeGroup() === group"
               (click)="selectGroup(group)">
-              {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+              {{ group }}
             </button>
           }
         </div>

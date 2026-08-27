@@ -14,7 +14,7 @@
                         <div class="text-white top-text"><span class="header-tagline-year">Desde 1999</span>, la mejor carne a la parrilla de Santander</div>
                         <button type="button" class="text-white top-text header-location" (click)="openLocationSelector()" aria-label="Cambiar sede seleccionada">
                             <i class="fa-solid fa-location-dot me-3" aria-hidden="true"></i>
-                            {{ branchService.selectedBranch().address }}
+                            {{ branchService.selectedBranch().address ?? branchService.selectedBranch().name }}
                         </button>
                         <div class="social-icon d-flex align-items-center">
                             <a routerLink="/login" class="text-white pe-2 top-text" aria-label="Iniciar sesión o registrarse"><i class="fa-solid fa-user me-3"></i> Iniciar sesión / Registrarse</a>
@@ -60,47 +60,21 @@
                                                     </li>
                                                    
                                                  
-                                                   <li>
-    <a href="#" (click)="$event.preventDefault()">
-        Sucursales
-        <i class="fa-regular fa-plus"></i>
-    </a>
-
-    <ul class="submenu">
-        <li>
-            <a href="#">
-                Bucaramanga y Santander
-                <i class="fa-regular fa-plus"></i>
-            </a>
-
-            <ul class="submenu">
-                <li><button type="button" (click)="branchService.selectAndOpen('carrera-33')">Carrera 33</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('san-pio')">San Pío</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-megamall')">C.C. Megamall</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cabecera-cuarta-etapa')">Cabecera - Cuarta Etapa</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-cacique')">C.C. Cacique</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('canaveral-carrera-26')">Canaveral - Carrera 26</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-canaveral-express')">C.C. Canaveral Express</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-de-la-cuesta')">C.C. De La Cuesta</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-acropolis')">C.C. Acrópolis</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-el-puente-san-gil')">C.C. El Puente - San Gil</button></li>
-            </ul>
-        </li>
-
-        <li>
-            <a href="#">
-                Bogotá
-                <i class="fa-regular fa-plus"></i>
-            </a>
-
-            <ul class="submenu">
-                <li><button type="button" (click)="branchService.selectAndOpen('cc-el-eden')">C.C. El Edén</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('pepe-sierra')">Pepe Sierra</button></li>
-                <li><button type="button" (click)="branchService.selectAndOpen('zona-g')">Zona G</button></li>
-            </ul>
-        </li>
-    </ul>
-</li>
+                                                    <li>
+                                                        <a href="#" (click)="$event.preventDefault()">Sucursales <i class="fa-regular fa-plus"></i></a>
+                                                        <ul class="submenu">
+                                                            @for (group of branchGroups; track group) {
+                                                                <li>
+                                                                    <a href="#" (click)="$event.preventDefault()">{{ group }} <i class="fa-regular fa-plus"></i></a>
+                                                                    <ul class="submenu">
+                                                                        @for (branch of branchService.branchesFor(group); track branch.id) {
+                                                                            <li><button type="button" (click)="branchService.selectAndOpen(branch.id)">{{ branch.name }}</button></li>
+                                                                        }
+                                                                    </ul>
+                                                                </li>
+                                                            }
+                                                        </ul>
+                                                    </li>
                                                     <li>
                                                         <a routerLink="/ubicaciones">Ubícanos en el mapa</a>
                                                     </li>
@@ -110,7 +84,21 @@
                                     </div>
                                 </div>
                                 <div class="header-right d-flex justify-content-end align-items-center">
-                                    <a href="index-2.html#0" class="search-trigger search-icon"><i class="fal fa-search"></i></a>
+                                    <button type="button" class="search-icon" aria-label="Buscar en el menú" (click)="openSearch()"><i class="fal fa-search" aria-hidden="true"></i></button>
+                                    <div class="header__phone">
+                                        <button type="button" [attr.aria-expanded]="phoneDirectoryOpen()" aria-controls="header-phone-directory" aria-label="Ver teléfonos de la sede seleccionada" (click)="openPhoneDirectory()"><i class="fa-solid fa-phone" aria-hidden="true"></i></button>
+                                        @if (phoneDirectoryOpen()) {
+                                            <section id="header-phone-directory" class="header-phone-directory" aria-label="Teléfonos de la sede seleccionada">
+                                                <p>Mercagán {{ branchService.selectedBranch().name }}</p>
+                                                @for (phone of branchService.selectedBranch().phones; track phone.value) {
+                                                    <a [href]="phone.telHref" [attr.aria-label]="'Llamar a Mercagán ' + branchService.selectedBranch().name + ' al ' + phone.display"><i class="fa-solid fa-phone" aria-hidden="true"></i>{{ phone.display }}</a>
+                                                }
+                                                @if (branchService.selectedBranch().whatsAppUrl) {
+                                                    <a class="header-phone-whatsapp" [href]="branchService.selectedBranch().whatsAppUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Escribir por WhatsApp a Mercagán ' + branchService.selectedBranch().name"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i>WhatsApp</a>
+                                                }
+                                            </section>
+                                        }
+                                    </div>
 
                                     <div class="header__cart">
                                         <a routerLink="/cart" [attr.data-cart-count]="cartService.totalItems()" [attr.aria-label]="'Abrir carrito, ' + cartService.totalItems() + (cartService.totalItems() === 1 ? ' producto' : ' productos')"> <i class="fa-sharp fa-regular fa-cart-shopping"></i> </a>
@@ -130,7 +118,7 @@
                                                             </div>
                                                             <div class="header__right__dropdown__content">
                                                                 <a routerLink="/cart">{{ item.product.name }}</a>
-                                                                <p>{{ item.quantity }} x <span class="price">{{ item.product.price * item.quantity }}$</span></p>
+                                                                <p>{{ item.quantity }} x <span class="price">{{ formatCop(item.product.price) }}</span></p>
                                                             </div>
                                                             <div class="header__right__dropdown__close">
                                                                 <button type="button" [attr.aria-label]="'Eliminar ' + item.product.name + ' del carrito'" (click)="removeFromCart(item.product)"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
@@ -138,7 +126,7 @@
                                                         </div>
                                                     }
                                                 </div>
-                                                <p class="dropdown__price">Total: <span>{{ cartService.total() }}$</span></p>
+                                                <p class="dropdown__price">Total: <span>{{ formatCop(cartService.total()) }}</span></p>
                                                 <div class="header__right__dropdown__button">
                                                     <a routerLink="/cart" class="theme-btn mb-2">Ver carrito ({{ cartService.totalItems() }})</a>
                                                     <a routerLink="/checkout" class="theme-btn style3">Finalizar pedido</a>

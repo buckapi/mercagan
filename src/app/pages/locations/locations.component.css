@@ -42,6 +42,9 @@
 .map-marker-tooltip strong, .map-marker-tooltip span { position: relative; z-index: 1; display: block; }
 .map-marker-tooltip img { position: relative; z-index: 1; display: block; width: 100%; height: 6.5rem; border-radius: .5rem .5rem 0 0; object-fit: cover; }
 .map-marker-tooltip-copy { padding: .6rem .7rem; }
+.map-marker-phones { display: grid !important; margin-top: .35rem; gap: .18rem; }
+.map-marker-phones a, .location-whatsapp-link { color: #fff; font-size: .72rem; text-decoration: underline; }
+.location-whatsapp-link { margin-top: .45rem; color: #75e9a1 !important; font-weight: 700; }
 .directions-button { display: flex !important; align-items: center; justify-content: center; gap: .35rem; margin-top: .55rem; padding: .5rem .6rem; border-radius: .35rem; background: #eb0029; color: #fff; font-size: .75rem; font-weight: 800; text-decoration: none; }
 .directions-button:hover, .directions-button:focus-visible { background: #fff; color: #eb0029; outline: 2px solid #eb0029; }
 .map-marker:hover .map-marker-tooltip, .map-marker:focus-within .map-marker-tooltip, .map-marker.is-selected .map-marker-tooltip { display: block; }

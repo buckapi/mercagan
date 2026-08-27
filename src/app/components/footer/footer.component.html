@@ -14,7 +14,7 @@
                                 <div class="item1"><i class="fa-solid fa-location-dot"></i></div>
                                 <div class="item2">
                                     <h6>dirección</h6>
-                                    <p>4648 Rocky Road Philadelphia </p>
+                                    <p>{{ branchService.selectedBranch().address ?? 'Dirección no disponible' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -22,8 +22,12 @@
                             <div class="fancy-box">
                                 <div class="item1"><i class="fa-solid fa-envelope"></i></div>
                                 <div class="item2">
-                                    <h6>envíanos un correo</h6>
-                                    <p>info@exmple.com</p>
+                                    <h6>WhatsApp</h6>
+                                    @if (branchService.selectedBranch().whatsApp; as whatsApp) {
+                                        <p><a [href]="branchService.selectedBranch().whatsAppUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Escribir por WhatsApp a Mercagán ' + branchService.selectedBranch().name">{{ whatsApp.display }}</a></p>
+                                    } @else {
+                                        <p>WhatsApp no disponible</p>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -31,8 +35,8 @@
                             <div class="fancy-box">
                                 <div class="item1"><i class="fa-regular fa-phone-volume"></i></div>
                                 <div class="item2">
-                                    <h6>llamada de emergencia</h6>
-                                    <p>+88 0123 654 99</p>
+                                    <h6>teléfono principal</h6>
+                                    <p><a [href]="branchService.selectedBranch().primaryPhone.telHref" [attr.aria-label]="'Llamar a Mercagán ' + branchService.selectedBranch().name + ' al ' + branchService.selectedBranch().primaryPhone.display">{{ branchService.selectedBranch().primaryPhone.display }}</a></p>
                                 </div>
                             </div>
                         </div>

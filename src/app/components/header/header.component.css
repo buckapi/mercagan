@@ -121,6 +121,17 @@
 
 .header-main .header-right .header__cart > a::before { content: attr(data-cart-count); }
 .header-main .header-right .header__cart > a[data-cart-count="0"]::before { display: none; }
+.header-main .header-right .search-icon { padding: 0; border: 0; background: transparent; }
+.header__phone { position: relative; display: flex; align-items: center; }
+.header__phone > button { padding: 15px 8px; border: 0; background: transparent; color: var(--text); font-size: 18px; }
+.header__phone > button:hover, .header__phone > button:focus-visible { color: var(--theme2); outline: none; }
+.header-phone-directory { position: absolute; top: 100%; right: -1rem; z-index: 1000; width: 220px; max-height: 330px; padding: 1rem; overflow-y: auto; border-bottom: 3px solid var(--border); background: var(--white); box-shadow: 0 0 50px 10px rgb(95 45 237 / 15%); }
+.header-phone-directory p { margin: 0 0 .65rem; color: var(--title); font-size: .78rem; font-weight: 800; line-height: 1.3; }
+.header-phone-directory a { display: block; padding: .35rem 0; color: var(--title); font-size: .86rem; }
+.header-phone-directory a:hover, .header-phone-directory a:focus-visible { color: var(--theme2); outline: none; }
+.header-phone-directory a i { width: 1.25rem; color: var(--theme2); }
+.header-phone-directory .header-phone-whatsapp { margin-top: .4rem; padding-top: .65rem; border-top: 1px solid var(--border-2); color: #159947; font-weight: 800; }
+.header-phone-directory .header-phone-whatsapp i { color: #159947; }
 .header__right__dropdown__close button { border: 0; background: transparent; color: var(--text); cursor: pointer; }
 .header__right__dropdown__close button:hover, .header__right__dropdown__close button:focus-visible { color: var(--theme2); outline: none; }
 .header-cart-empty { padding: .5rem 0; color: var(--title); text-align: center; }

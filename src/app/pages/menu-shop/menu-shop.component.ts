@@ -1,10 +1,10 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, effect, inject, signal, untracked } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, computed, effect, inject, signal, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Branch } from '../../models/branch.model';
+import { Branch, BranchGroup } from '../../models/branch.model';
 import { BranchService } from '../../services/branch.service';
 import { CartService } from '../../services/cart.service';
-import { MenuCategory, MenuProduct } from '../../models/menu.model';
+import { formatCop, MenuCategory, MenuProduct } from '../../models/menu.model';
 import categoriesData from '../../data/menu-categories.json';
 import productsData from '../../data/menu-products.json';
 
@@ -15,6 +15,7 @@ import productsData from '../../data/menu-products.json';
   styleUrl: './menu-shop.component.css',
 })
 export class MenuShopComponent {
+  readonly formatCop = formatCop;
   readonly branchService = inject(BranchService);
   readonly cartService = inject(CartService);
   readonly categoriesData = categoriesData as readonly MenuCategory[];
@@ -31,10 +32,12 @@ export class MenuShopComponent {
   readonly locating = signal(false);
   readonly locationError = signal('');
   readonly candidateBranchId = signal(this.branchService.selectedBranch().id);
-  readonly branchGroups: readonly Branch['group'][] = ['Bucaramanga y Santander', 'Bogotá'];
-  readonly activeBranchGroup = signal<Branch['group']>(this.branchService.selectedBranch().group);
+  readonly branchGroups = this.branchService.branchGroups;
+  readonly activeBranchGroup = signal<BranchGroup>(this.branchService.selectedBranch().group);
   readonly quickViewProduct = signal<MenuProduct | null>(null);
-  readonly productQuantities = signal<Record<string, number>>({});
+  readonly productQuantities = computed(() =>
+    Object.fromEntries(this.cartService.items().map((item) => [item.product.id, item.quantity])),
+  );
   private ribbonRevealRequested = false;
   private ribbonRevealScrollY = 0;
   private lastLocationRequest = 0;
@@ -49,22 +52,6 @@ export class MenuShopComponent {
     this.branchService.selectedBranch().id;
     untracked(() => this.selectedCategory.set('Todas'));
   });
-
-  private readonly branchCoordinates: Readonly<Record<string, { latitude: number; longitude: number }>> = {
-    'carrera-33': { latitude: 7.1267, longitude: -73.1174 },
-    'san-pio': { latitude: 7.1165, longitude: -73.1082 },
-    'cc-megamall': { latitude: 7.1324, longitude: -73.1124 },
-    'cabecera-cuarta-etapa': { latitude: 7.1191, longitude: -73.1098 },
-    'cc-cacique': { latitude: 7.0996, longitude: -73.1063 },
-    'canaveral-carrera-26': { latitude: 7.0687, longitude: -73.1058 },
-    'cc-canaveral-express': { latitude: 7.0674, longitude: -73.1051 },
-    'cc-de-la-cuesta': { latitude: 7.0718, longitude: -73.1158 },
-    'cc-acropolis': { latitude: 7.1148, longitude: -73.1269 },
-    'cc-el-puente-san-gil': { latitude: 6.5558, longitude: -73.1331 },
-    'cc-el-eden': { latitude: 4.6534, longitude: -74.1328 },
-    'pepe-sierra': { latitude: 4.6968, longitude: -74.0437 },
-    'zona-g': { latitude: 4.6505, longitude: -74.0570 },
-  };
 
   toggleFilters(): void { this.filtersOpen.update((open) => !open); }
   closeFilters(): void { this.filtersOpen.set(false); }
@@ -118,24 +105,10 @@ export class MenuShopComponent {
 
   addToCart(product: MenuProduct): void {
     this.cartService.add(product);
-    this.productQuantities.update((quantities) => ({
-      ...quantities,
-      [product.id]: Math.max(1, quantities[product.id] ?? 0),
-    }));
   }
 
   changeQuantity(product: MenuProduct, delta: number): void {
     this.cartService.change(product, delta);
-    this.productQuantities.update((quantities) => {
-      const nextQuantity = Math.max(0, (quantities[product.id] ?? 0) + delta);
-      const nextQuantities = { ...quantities };
-      if (nextQuantity === 0) {
-        delete nextQuantities[product.id];
-      } else {
-        nextQuantities[product.id] = nextQuantity;
-      }
-      return nextQuantities;
-    });
   }
 
   visibleProducts(): readonly MenuProduct[] {
@@ -166,8 +139,8 @@ export class MenuShopComponent {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  branchesFor(group: Branch['group']): readonly Branch[] {
-    return this.branchService.branches.filter((branch) => branch.group === group);
+  branchesFor(group: BranchGroup): readonly Branch[] {
+    return this.branchService.branchesFor(group);
   }
 
   openLocationModal(): void {
@@ -187,7 +160,7 @@ export class MenuShopComponent {
     this.cdr.detectChanges();
   }
 
-  selectBranchGroup(group: Branch['group']): void {
+  selectBranchGroup(group: BranchGroup): void {
     this.activeBranchGroup.set(group);
     const currentCandidate = this.branchService.branches.find((branch) => branch.id === this.candidateBranchId());
 
@@ -239,17 +212,18 @@ export class MenuShopComponent {
   }
 
   private findNearestBranch(latitude: number, longitude: number): Branch {
-    return this.branchService.branches.reduce((nearest, branch) => {
-      const nearestDistance = this.distanceTo(latitude, longitude, nearest.id);
-      const branchDistance = this.distanceTo(latitude, longitude, branch.id);
+    const branchesWithCoordinates = this.branchService.branches.filter((branch) => branch.latitude !== undefined && branch.longitude !== undefined);
+    return branchesWithCoordinates.reduce((nearest, branch) => {
+      const nearestDistance = this.distanceTo(latitude, longitude, nearest);
+      const branchDistance = this.distanceTo(latitude, longitude, branch);
       return branchDistance < nearestDistance ? branch : nearest;
     });
   }
 
-  private distanceTo(latitude: number, longitude: number, branchId: string): number {
-    const target = this.branchCoordinates[branchId];
-    const latDifference = latitude - target.latitude;
-    const longitudeDifference = (longitude - target.longitude) * Math.cos(latitude * Math.PI / 180);
+  private distanceTo(latitude: number, longitude: number, branch: Branch): number {
+    if (branch.latitude === undefined || branch.longitude === undefined) return Number.POSITIVE_INFINITY;
+    const latDifference = latitude - branch.latitude;
+    const longitudeDifference = (longitude - branch.longitude) * Math.cos(latitude * Math.PI / 180);
     return latDifference ** 2 + longitudeDifference ** 2;
   }
 }

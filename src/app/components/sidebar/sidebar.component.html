@@ -28,7 +28,7 @@
                                 [attr.aria-controls]="'sidebar-branch-panel-' + $index"
                                 [class.is-active]="activeBranchGroup() === group"
                                 (click)="selectBranchGroup(group)">
-                                {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+                                {{ group }}
                             </button>
                         }
                     </div>
@@ -65,7 +65,7 @@
                                 [attr.aria-controls]="'sidebar-mobile-branch-panel-' + $index"
                                 [class.is-active]="activeBranchGroup() === group"
                                 (click)="selectBranchGroup(group)">
-                                {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+                                {{ group }}
                             </button>
                         }
                     </div>
@@ -109,7 +109,16 @@
                             <div class="offcanvas__contact-text">
                                 <strong>{{ branchService.selectedBranch().name }}</strong>
                                 <span>{{ branchService.selectedBranch().group }}</span>
-                                <span>{{ branchService.selectedBranch().address }}</span>
+                                @if (branchService.selectedBranch().address) { <span>{{ branchService.selectedBranch().address }}</span> }
+                            </div>
+                        </li>
+                        <li class="d-flex align-items-start branch-phone-list">
+                            <div class="offcanvas__contact-icon"><i class="fa-solid fa-phone" aria-hidden="true"></i></div>
+                            <div class="offcanvas__contact-text">
+                                <strong>Teléfonos</strong>
+                                @for (phone of branchService.selectedBranch().phones; track phone.value) {
+                                    <a [href]="phone.telHref" [attr.aria-label]="'Llamar a Mercagán ' + branchService.selectedBranch().name + ' al ' + phone.display">{{ phone.display }}</a>
+                                }
                             </div>
                         </li>
                     </ul>
@@ -133,6 +142,19 @@
                                 <span class="button-text">Cómo llegar</span>
                             </span>
                         </a>
+                        @if (branchService.selectedBranch().whatsAppUrl) {
+                            <a
+                                [href]="branchService.selectedBranch().whatsAppUrl"
+                                class="theme-btn branch-whatsapp-button"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                [attr.aria-label]="'Escribir por WhatsApp a Mercagán ' + branchService.selectedBranch().name">
+                                <span class="button-content-wrapper d-flex align-items-center justify-content-center">
+                                    <span class="button-icon"><i class="fa-brands fa-whatsapp bg-transparent text-white me-2"></i></span>
+                                    <span class="button-text">WhatsApp</span>
+                                </span>
+                            </a>
+                        }
                         <a
                             routerLink="/ubicaciones"
                             class="theme-btn branch-map-button"

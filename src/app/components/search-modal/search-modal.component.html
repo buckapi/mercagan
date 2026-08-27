@@ -1,14 +1,52 @@
-    <!-- Área de búsqueda -->
-    <div class="search-wrap" role="dialog" aria-modal="true" aria-label="Búsqueda">
-        <div class="search-inner">
-            <i class="fas fa-times search-close" id="search-close" role="button" tabindex="0" aria-label="Cerrar búsqueda"></i>
-            <div class="search-cell">
-                <form method="get">
-                    <div class="search-field-holder">
-                        <label class="visually-hidden" for="main-search-input">Buscar</label>
-                        <input id="main-search-input" type="search" class="main-search-input" placeholder="Buscar...">
+@if (searchService.isOpen()) {
+  <div class="search-wrap is-open" role="dialog" aria-modal="true" aria-labelledby="search-title">
+    <div class="search-inner">
+      <button type="button" class="search-close" aria-label="Cerrar búsqueda" (click)="close()"><i class="fas fa-times" aria-hidden="true"></i></button>
+      <div class="search-cell">
+        <form (submit)="$event.preventDefault()">
+          <div class="search-field-holder">
+            <label class="visually-hidden" for="main-search-input">Buscar en el menú</label>
+            <input id="main-search-input" type="search" class="main-search-input" placeholder="Buscar en el menú..." [value]="query()" (input)="updateQuery($event)" autocomplete="off" autofocus>
+          </div>
+        </form>
+        <section class="search-results" aria-live="polite">
+          <p id="search-title">Productos de Mercagán {{ branchService.selectedBranch().name }}</p>
+          <label class="search-scope-switch">
+            <input type="checkbox" [checked]="searchAllBranches()" (change)="toggleSearchScope($event)">
+            <span aria-hidden="true"></span>
+            Buscar en todas las sucursales
+          </label>
+          @if (query() && results().length === 0) {
+            <span>No encontramos productos para “{{ query() }}”.</span>
+          }
+          <div class="dishes-card-wrap style2 search-result-grid">
+            @for (product of results(); track product.id) {
+              <div class="dishes-card style2 search-product-card" [class.is-in-cart]="(productQuantities()[product.id] ?? 0) > 0">
+                <div class="dishes-thumb">
+                  <img [src]="product.image" [alt]="product.name">
+                  <div class="circle-shape"><img class="cir36" src="assets/img/food-items/circleShape.png" alt=""></div>
+                </div>
+                <div class="dishes-content">
+                  <h3>{{ product.name }}</h3>
+                  @if (searchAllBranches()) { <p class="search-result-branch"><i class="fa-solid fa-location-dot" aria-hidden="true"></i> {{ branchName(product.branchId) }}</p> }
+                  <div class="star"><img src="assets/img/icon/star2.svg" alt="Calificación"></div>
+                  <h6>{{ formatCop(product.price) }}</h6>
+                  @if ((productQuantities()[product.id] ?? 0) === 0) {
+                    <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)" [attr.aria-label]="'Agregar ' + product.name + ' al carrito'">Pedir ahora <i class="fa-regular fa-basket-shopping" aria-hidden="true"></i></button>
+                  } @else {
+                    <div class="search-quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + product.name">
+                      <button type="button" [attr.aria-label]="'Disminuir cantidad de ' + product.name" (click)="changeQuantity(product, -1)">−</button>
+                      <span aria-live="polite">{{ productQuantities()[product.id] }}</span>
+                      <button type="button" [attr.aria-label]="'Aumentar cantidad de ' + product.name" (click)="changeQuantity(product, 1)">+</button>
                     </div>
-                </form>
-            </div>
-        </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+          <a routerLink="/menu" (click)="close()">Ver menú de esta sede <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </section>
+      </div>
     </div>
+  </div>
+}

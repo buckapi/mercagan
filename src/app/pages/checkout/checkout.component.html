@@ -38,7 +38,12 @@
               <h2 id="delivery-title">Entrega</h2>
               <div class="branch-summary">
                 <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
-                <div><strong>{{ branchService.selectedBranch().name }}</strong><span>{{ branchService.selectedBranch().address }}</span></div>
+                <div>
+                  <strong>{{ branchService.selectedBranch().name }}</strong>
+                  @if (branchService.selectedBranch().address) { <span>{{ branchService.selectedBranch().address }}</span> }
+                  <a [href]="branchService.selectedBranch().primaryPhone.telHref" [attr.aria-label]="'Llamar a Mercagán ' + branchService.selectedBranch().name + ' al ' + branchService.selectedBranch().primaryPhone.display"><i class="fa-solid fa-phone" aria-hidden="true"></i> {{ branchService.selectedBranch().primaryPhone.display }}</a>
+                  @if (branchService.selectedBranch().whatsAppUrl) { <a [href]="branchService.selectedBranch().whatsAppUrl" target="_blank" rel="noopener noreferrer" [attr.aria-label]="'Escribir por WhatsApp a Mercagán ' + branchService.selectedBranch().name"><i class="fa-brands fa-whatsapp" aria-hidden="true"></i> WhatsApp</a> }
+                </div>
               </div>
               <p>Confirmaremos la disponibilidad y el costo de entrega para esta dirección antes de procesar el pago.</p>
               <a routerLink="/ubicaciones">Cambiar sede</a>
@@ -57,16 +62,16 @@
                   @for (item of cartService.items(); track item.product.id) {
                     <tr>
                       <td data-title="Producto"><div class="order-product"><img [src]="item.product.image" [alt]="item.product.name"><strong>{{ item.product.name }}</strong></div></td>
-                      <td data-title="Precio">{{ item.product.price }}$</td>
+                      <td data-title="Precio">{{ formatCop(item.product.price) }}</td>
                       <td data-title="Cantidad">{{ item.quantity }}</td>
-                      <td data-title="Total"><strong>{{ item.product.price * item.quantity }}$</strong></td>
+                      <td data-title="Total"><strong>{{ formatCop(item.product.price * item.quantity) }}</strong></td>
                     </tr>
                   }
                 </tbody>
                 <tfoot>
-                  <tr><th colspan="3">Subtotal</th><td>{{ cartService.total() }}$</td></tr>
+                  <tr><th colspan="3">Subtotal</th><td>{{ formatCop(cartService.total()) }}</td></tr>
                   <tr><th colspan="3">Entrega</th><td>A confirmar</td></tr>
-                  <tr class="order-total"><th colspan="3">Total</th><td>{{ cartService.total() }}$</td></tr>
+                  <tr class="order-total"><th colspan="3">Total</th><td>{{ formatCop(cartService.total()) }}</td></tr>
                 </tfoot>
               </table>
             </div>

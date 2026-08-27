@@ -76,12 +76,14 @@ El proyecto contempla una sección para organizar los diferentes puntos de atenc
 La información de cada sede puede incluir:
 
 - Nombre de la sede.
-- Ciudad o zona.
+- Departamento, región y ciudad.
 - Dirección.
 - Horarios.
 - Teléfono.
 - Enlace a Google Maps.
 - Acceso a WhatsApp cuando aplique.
+
+La fuente de datos actual es `src/app/data/branches.json` y utiliza la jerarquía `department → region → city → branch`. El Área Metropolitana de Bucaramanga agrupa sedes ubicadas realmente en Bucaramanga, Floridablanca y Piedecuesta; no representa una sola ciudad.
 
 ## Desarrollo local
 

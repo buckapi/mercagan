@@ -26,6 +26,8 @@
 .branch-summary div { display: grid; gap: .15rem; }
 .branch-summary strong { color: #28211d; font-size: .9rem; }
 .branch-summary span, .delivery-panel > p { color: #716963; font-size: .8rem; line-height: 1.5; }
+.branch-summary a { color: #eb0029; font-size: .78rem; font-weight: 700; }
+.branch-summary a i { margin-right: .2rem; }
 .delivery-panel > p { margin: 1rem 0 .65rem; }
 .delivery-panel > a, .order-section-heading > a { color: #eb0029; font-size: .83rem; font-weight: 800; }
 

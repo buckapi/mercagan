@@ -224,7 +224,7 @@
                                 aria-labelledby="pills-grid-tab" tabindex="0">
                                 <ng-template #productCards>
                                     @for (product of visibleProducts(); track product.id) {
-                                        <div class="dishes-card style2 wow fadeInUp product-card-enter" [attr.data-wow-delay]="product.delay" [style.--product-delay]="product.delay">
+                                        <div class="dishes-card style2 wow fadeInUp product-card-enter" [class.is-in-cart]="(productQuantities()[product.id] ?? 0) > 0" [attr.data-wow-delay]="product.delay" [style.--product-delay]="product.delay">
                                             <div class="dishes-thumb">
                                                 <img [src]="product.image" [alt]="product.name">
                                                 <div class="circle-shape"><img class="cir36" src="assets/img/food-items/circleShape.png" alt=""></div>
@@ -238,7 +238,7 @@
                                                 </div>
                                                 <div class="star"><img src="assets/img/icon/star2.svg" alt="Calificación"></div>
                                                 <div class="text">{{ product.shortDescription }}</div>
-                                                <h6>{{ product.price }}$</h6>
+                                                <h6>{{ formatCop(product.price) }}</h6>
                                                 @if ((productQuantities()[product.id] ?? 0) === 0) {
                                                     <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
                                                 } @else {
@@ -266,7 +266,7 @@
                                 tabindex="0">
                                 <div class="dishes-card-wrap style3">
                                     @for (product of visibleProducts(); track product.id) {
-                                        <div class="dishes-card style4">
+                                        <div class="dishes-card style4" [class.is-in-cart]="(productQuantities()[product.id] ?? 0) > 0">
                                             <div class="dishes-thumb">
                                                 <img [src]="product.image" [alt]="product.name">
                                                 <div class="circle-shape"><img class="cir36" src="assets/img/food-items/circleShape.png" alt=""></div>
@@ -278,7 +278,7 @@
                                                 </div>
                                                 <div class="star"><img src="assets/img/icon/star2.svg" alt="Calificación"></div>
                                                 <div class="text">{{ product.shortDescription }}</div>
-                                                <h6>{{ product.price }}$</h6>
+                                                <h6>{{ formatCop(product.price) }}</h6>
                                                 @if ((productQuantities()[product.id] ?? 0) === 0) {
                                                     <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
                                                 } @else {
@@ -470,7 +470,7 @@
                     <p class="quick-view-eyebrow">DETALLE DEL PRODUCTO</p>
                     <h2 id="quick-view-title">{{ product.name }}</h2>
                     <p class="quick-view-description">{{ product.shortDescription }}</p>
-                    <p class="quick-view-price">{{ product.price }}$</p>
+                    <p class="quick-view-price">{{ formatCop(product.price) }}</p>
                     @if ((productQuantities()[product.id] ?? 0) === 0) {
                         <button type="button" class="theme-btn style6 order-button" (click)="addToCart(product)">Pedir ahora <i class="fa-regular fa-basket-shopping"></i></button>
                     } @else {
@@ -509,7 +509,7 @@
                             [attr.aria-controls]="'branch-panel-' + $index"
                             [class.is-active]="activeBranchGroup() === group"
                             (click)="selectBranchGroup(group)">
-                            {{ group === 'Bogotá' ? 'Bogotá' : 'Santander + Bucaramanga' }}
+                            {{ group }}
                         </button>
                     }
                 </div>
@@ -532,7 +532,7 @@
                                         <img class="branch-card-image" [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name" loading="lazy">
                                         <span class="branch-card-copy">
                                             <strong>{{ branch.name }}</strong>
-                                            <small>{{ branch.address }}</small>
+                                            @if (branch.address) { <small>{{ branch.address }}</small> }
                                         </span>
                                         <span class="branch-card-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
                                     </button>

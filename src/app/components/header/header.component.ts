@@ -2,7 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { BranchService } from '../../services/branch.service';
 import { CartService } from '../../services/cart.service';
-import { MenuProduct } from '../../models/menu.model';
+import { SearchService } from '../../services/search.service';
+import { formatCop, MenuProduct } from '../../models/menu.model';
 
 @Component({
   selector: 'app-header',
@@ -12,10 +13,14 @@ import { MenuProduct } from '../../models/menu.model';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  readonly formatCop = formatCop;
   readonly branchService = inject(BranchService);
+  readonly branchGroups = this.branchService.branchGroups;
   readonly cartService = inject(CartService);
+  readonly searchService = inject(SearchService);
   private readonly router = inject(Router);
   readonly mobileMenuOpen = signal(false);
+  readonly phoneDirectoryOpen = signal(false);
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open) => !open);
@@ -31,6 +36,19 @@ export class HeaderComponent {
       return;
     }
     this.branchService.open();
+  }
+
+  openPhoneDirectory(): void {
+    if (!this.branchService.hasSelectedBranch()) {
+      this.router.navigate(['/menu']);
+      this.branchService.requestLocationModal();
+      return;
+    }
+    this.phoneDirectoryOpen.update((open) => !open);
+  }
+
+  openSearch(): void {
+    this.searchService.open();
   }
 
   removeFromCart(product: MenuProduct): void {

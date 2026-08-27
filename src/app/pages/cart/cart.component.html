@@ -42,7 +42,7 @@
                       </div>
                     </div>
                   </td>
-                  <td data-title="Precio"><span class="cart-amount">{{ item.product.price }}$</span></td>
+                  <td data-title="Precio"><span class="cart-amount">{{ formatCop(item.product.price) }}</span></td>
                   <td data-title="Cantidad">
                     <div class="quantity-control" role="group" [attr.aria-label]="'Cantidad de ' + item.product.name">
                       <button type="button" [attr.aria-label]="'Disminuir cantidad de ' + item.product.name" (click)="changeQuantity(item.product, -1)"><i class="fa-solid fa-minus" aria-hidden="true"></i></button>
@@ -50,7 +50,7 @@
                       <button type="button" [attr.aria-label]="'Aumentar cantidad de ' + item.product.name" (click)="changeQuantity(item.product, 1)"><i class="fa-solid fa-plus" aria-hidden="true"></i></button>
                     </div>
                   </td>
-                  <td data-title="Total"><strong class="cart-amount">{{ item.product.price * item.quantity }}$</strong></td>
+                  <td data-title="Total"><strong class="cart-amount">{{ formatCop(item.product.price * item.quantity) }}</strong></td>
                   <td class="cart-remove-cell">
                     <button type="button" class="remove-item" [attr.aria-label]="'Eliminar ' + item.product.name" (click)="remove(item.product)"><i class="fa-regular fa-trash-can" aria-hidden="true"></i></button>
                   </td>
@@ -72,9 +72,9 @@
           <aside class="cart-summary" aria-labelledby="summary-title">
             <h2 id="summary-title">Total del carrito</h2>
             <dl>
-              <div><dt>Subtotal</dt><dd>{{ cartService.total() }}$</dd></div>
+              <div><dt>Subtotal</dt><dd>{{ formatCop(cartService.total()) }}</dd></div>
               <div><dt>Entrega</dt><dd>A confirmar</dd></div>
-              <div class="summary-total"><dt>Total</dt><dd>{{ cartService.total() }}$</dd></div>
+              <div class="summary-total"><dt>Total</dt><dd>{{ formatCop(cartService.total()) }}</dd></div>
             </dl>
             <p class="summary-note">Los costos de entrega se confirmarán durante el proceso de pago.</p>
             <a routerLink="/checkout" class="theme-btn checkout-button">Continuar al pago <i class="fa-sharp fa-regular fa-arrow-right" aria-hidden="true"></i></a>

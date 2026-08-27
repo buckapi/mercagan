@@ -18,3 +18,11 @@ export interface MenuProduct {
   delay: string;
   active: boolean;
 }
+
+const copFormatter = new Intl.NumberFormat('es-CO', {
+  style: 'currency',
+  currency: 'COP',
+  maximumFractionDigits: 0,
+});
+
+export const formatCop = (value: number): string => copFormatter.format(value);

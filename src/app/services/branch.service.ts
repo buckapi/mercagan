@@ -1,10 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject, signal } from '@angular/core';
-import { BRANCHES, Branch } from '../models/branch.model';
+import { BRANCHES, Branch, BranchGroup } from '../models/branch.model';
 
 @Injectable({ providedIn: 'root' })
 export class BranchService {
   readonly branches = BRANCHES;
+  readonly branchGroups: readonly BranchGroup[] = ['Bucaramanga y área metropolitana', 'Santander', 'Bogotá'];
   private readonly storageKey = 'mercagan-selected-branch';
   private readonly storage = inject(DOCUMENT).defaultView?.localStorage;
   private readonly storedBranchId = this.readStoredBranchId();
@@ -53,6 +54,22 @@ export class BranchService {
 
   requestLocationModal(): void {
     this.locationModalRequest.update((request) => request + 1);
+  }
+
+  branchesFor(group: BranchGroup): readonly Branch[] {
+    return this.branches.filter((branch) => branch.group === group);
+  }
+
+  branchesByDepartment(department: string): readonly Branch[] {
+    return this.branches.filter((branch) => branch.department === department);
+  }
+
+  branchesByRegion(region: string): readonly Branch[] {
+    return this.branches.filter((branch) => branch.region === region);
+  }
+
+  branchesByCity(city: string): readonly Branch[] {
+    return this.branches.filter((branch) => branch.city === city);
   }
 
   private branchFor(id: string | null): Branch | undefined {

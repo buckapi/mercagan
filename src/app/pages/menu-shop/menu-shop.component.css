@@ -65,6 +65,7 @@
 .quick-view-icon-button { display: grid; width: 30px; height: 30px; flex: 0 0 30px; place-items: center; border: 1px solid #eb0029; border-radius: 50%; background: #fff; color: #eb0029; font-size: .78rem; transition: background .15s ease, color .15s ease, transform .15s ease; }
 .quick-view-icon-button:hover, .quick-view-icon-button:focus-visible { background: #eb0029; color: #fff; transform: translateY(-1px); }
 .order-button { border: 0; }
+.dishes-card.is-in-cart { border: 2px solid #eb0029; }
 .quantity-control { display: flex; width: 100%; min-height: 42px; align-items: center; justify-content: center; gap: .7rem; }
 .quantity-button { display: grid; width: 32px; height: 32px; place-items: center; border: 1px solid #eb0029; border-radius: 50%; background: #fff; color: #eb0029; font-size: 1.25rem; line-height: 1; transition: background .15s ease, color .15s ease; }
 .quantity-button:hover, .quantity-button:focus-visible { background: #eb0029; color: #fff; }

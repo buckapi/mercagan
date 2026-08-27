@@ -19,6 +19,7 @@
   { "id": "acropolis-bebidas", "branchId": "cc-acropolis", "name": "Bebidas", "slug": "bebidas", "sortOrder": 2, "active": true },
   { "id": "sangil-parrilla", "branchId": "cc-el-puente-san-gil", "name": "Parrilla", "slug": "parrilla", "sortOrder": 1, "active": true },
   { "id": "sangil-combos", "branchId": "cc-el-puente-san-gil", "name": "Combos", "slug": "combos", "sortOrder": 2, "active": true },
+  { "id": "panachi-parrilla", "branchId": "panachi", "name": "Parrilla", "slug": "parrilla", "sortOrder": 1, "active": true },
   { "id": "eden-carnes", "branchId": "cc-el-eden", "name": "Cortes de carne", "slug": "cortes-de-carne", "sortOrder": 1, "active": true },
   { "id": "eden-entradas", "branchId": "cc-el-eden", "name": "Entradas", "slug": "entradas", "sortOrder": 2, "active": true },
   { "id": "pepe-parrilla", "branchId": "pepe-sierra", "name": "Parrilla", "slug": "parrilla", "sortOrder": 1, "active": true },

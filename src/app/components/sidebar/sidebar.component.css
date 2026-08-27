@@ -126,6 +126,14 @@
   font-size: 0.9rem;
 }
 
+.offcanvas__contact-text a {
+  color: inherit;
+  font-size: 0.9rem;
+}
+
+.branch-phone-list { align-items: flex-start !important; }
+.branch-whatsapp-button { background: #25d366; }
+
 .branch-back {
   margin-bottom: 1rem;
   padding: 0;
