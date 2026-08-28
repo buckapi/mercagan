@@ -8,9 +8,9 @@ import { CheckoutComponent } from './pages/checkout/checkout.component';
 import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent, title: 'Fresheat food & Restaurant' },
-  { path: 'about', component: AboutComponent, title: 'About Us | Fresheat' },
-  { path: 'menu', component: MenuShopComponent, title: 'Menu | Fresheat' },
+  { path: '', component: HomeComponent, title: 'Mercagan' },
+  { path: 'about', component: AboutComponent, title: 'Quienes somos' },
+  { path: 'menu', component: MenuShopComponent, title: 'Menu' },
   { path: 'ubicaciones', component: LocationsComponent, title: 'Ubicaciones | Mercagan' },
   { path: 'cart', component: CartComponent, title: 'Carrito | Mercagan' },
   { path: 'checkout', component: CheckoutComponent, title: 'Finalizar pedido | Mercagan' },
