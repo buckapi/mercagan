@@ -84,6 +84,12 @@
   transition: background-color .2s ease, opacity .2s ease;
 }
 
+@media (min-width: 992px) {
+  .banner-third-thumb {
+    transform: translateX(-3rem);
+  }
+}
+
 .cta-wrap.style3 .cta-content .qr-instruction {
   margin: -1.25rem 0 1.5rem;
   color: #fff;
