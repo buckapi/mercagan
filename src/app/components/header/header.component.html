@@ -62,18 +62,17 @@
                                                  
                                                     <li>
                                                         <a href="#" (click)="$event.preventDefault()">Sucursales <i class="fa-regular fa-plus"></i></a>
-                                                        <ul class="submenu branch-menu">
+                                                        <ul class="submenu">
                                                             @for (department of departments; track department.name) {
-                                                                <li class="branch-menu-department">
-                                                                    <span class="branch-menu-department-title">{{ department.navigationName }}</span>
-                                                                    <div class="branch-menu-regions">
-                                                                        @for (region of department.regions; track region.name) {
-                                                                            <span class="branch-menu-region-title">{{ region.navigationName }}</span>
-                                                                            @for (branch of region.branches; track branch.id) {
-                                                                                <button type="button" (click)="branchService.selectAndOpen(branch.id)">{{ branch.shortName }}</button>
-                                                                            }
+                                                                <li>
+                                                                    <a href="#" (click)="$event.preventDefault()">
+                                                                        {{ department.navigationName }} <i class="fa-regular fa-plus"></i>
+                                                                    </a>
+                                                                    <ul class="submenu">
+                                                                        @for (branch of branchService.branchesByDepartment(department.name); track branch.id) {
+                                                                            <li><a href="#" (click)="$event.preventDefault(); branchService.selectAndOpen(branch.id)">{{ branch.shortName }}</a></li>
                                                                         }
-                                                                    </div>
+                                                                    </ul>
                                                                 </li>
                                                             }
                                                         </ul>
