@@ -46,6 +46,7 @@
 .desktop-shop-ribbon.is-hidden.is-scrolled { padding: .45rem; }
 .desktop-shop-ribbon.is-hidden > :not(.ribbon-visibility-toggle) { display: none; }
 .sort-bar { display: none; }
+.page-nav-wrap a.is-disabled { cursor: default; opacity: .45; pointer-events: none; }
 
 @keyframes product-card-enter {
   from { opacity: 0; transform: translateY(22px); }

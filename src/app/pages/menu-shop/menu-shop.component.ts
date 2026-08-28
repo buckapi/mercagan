@@ -28,6 +28,8 @@ export class MenuShopComponent {
   readonly ribbonScrolled = signal(false);
   readonly ribbonHidden = signal(false);
   readonly selectedCategory = signal('Todas');
+  readonly currentPage = signal(1);
+  readonly productsPerPage = 12;
   readonly locationModalOpen = signal(!this.branchService.hasSelectedBranch() && !this.branchService.consumeLocationModalSuppression());
   readonly locating = signal(false);
   readonly locationError = signal('');
@@ -38,6 +40,21 @@ export class MenuShopComponent {
   readonly productQuantities = computed(() =>
     Object.fromEntries(this.cartService.items().map((item) => [item.product.id, item.quantity])),
   );
+  readonly filteredProducts = computed(() => {
+    const category = this.selectedCategory();
+    const branchId = this.branchService.selectedBranch().id;
+    const products = this.products.filter((product) => product.active && product.branchId === branchId);
+
+    if (category === 'Todas') return products;
+    const categoryRecord = this.availableCategories().find((item) => item.name === category);
+    return products.filter((product) => product.categoryId === categoryRecord?.id);
+  });
+  readonly totalPages = computed(() => Math.max(1, Math.ceil(this.filteredProducts().length / this.productsPerPage)));
+  readonly paginatedProducts = computed(() => {
+    const start = (this.currentPage() - 1) * this.productsPerPage;
+    return this.filteredProducts().slice(start, start + this.productsPerPage);
+  });
+  readonly pageNumbers = computed(() => Array.from({ length: this.totalPages() }, (_, index) => index + 1));
   private ribbonRevealRequested = false;
   private ribbonRevealScrollY = 0;
   private lastLocationRequest = 0;
@@ -50,7 +67,10 @@ export class MenuShopComponent {
   });
   private readonly branchChangeEffect = effect(() => {
     this.branchService.selectedBranch().id;
-    untracked(() => this.selectedCategory.set('Todas'));
+    untracked(() => {
+      this.selectedCategory.set('Todas');
+      this.currentPage.set(1);
+    });
   });
 
   toggleFilters(): void { this.filtersOpen.update((open) => !open); }
@@ -112,11 +132,7 @@ export class MenuShopComponent {
   }
 
   visibleProducts(): readonly MenuProduct[] {
-    const category = this.selectedCategory();
-    const branchId = this.branchService.selectedBranch().id;
-    if (category === 'Todas') return this.products.filter((product) => product.active && product.branchId === branchId);
-    const categoryRecord = this.availableCategories().find((item) => item.name === category);
-    return this.products.filter((product) => product.active && product.branchId === branchId && product.categoryId === categoryRecord?.id);
+    return this.filteredProducts();
   }
 
   categories(): readonly string[] {
@@ -136,7 +152,25 @@ export class MenuShopComponent {
   }
 
   selectCategory(event: Event): void {
-    this.selectedCategory.set((event.target as HTMLSelectElement).value);
+    this.setCategory((event.target as HTMLSelectElement).value);
+  }
+
+  setCategory(category: string): void {
+    this.selectedCategory.set(category);
+    this.currentPage.set(1);
+  }
+
+  goToPage(page: number): void {
+    this.currentPage.set(Math.min(Math.max(page, 1), this.totalPages()));
+  }
+
+  resultSummary(): string {
+    const total = this.filteredProducts().length;
+    if (total === 0) return 'No hay productos disponibles';
+
+    const first = (this.currentPage() - 1) * this.productsPerPage + 1;
+    const last = Math.min(first + this.productsPerPage - 1, total);
+    return `Mostrando ${first} - ${last} de ${total} resultados`;
   }
 
   openLocationModal(): void {

@@ -438,8 +438,13 @@
                     <h2 id="b2b-modal-title">Hablemos de tu negocio</h2>
                     <p id="b2b-modal-description">Cuéntanos qué necesitas y envía tu solicitud directamente al equipo de la sede que prefieras.</p>
                     <p class="b2b-branch-label">Elige la sede que atenderá tu solicitud</p>
-                    <div class="b2b-branch-cards" role="list" aria-label="Sedes con WhatsApp disponible">
-                        @for (branch of b2bBranches; track branch.id) {
+                    <div class="b2b-department-selector" role="tablist" aria-label="Departamento de la sede">
+                        @for (department of b2bDepartments; track department.name) {
+                            <button type="button" role="tab" [class.is-active]="selectedB2bDepartment() === department.name" [attr.aria-selected]="selectedB2bDepartment() === department.name" (click)="selectB2bDepartment(department.name)">{{ department.navigationName }}</button>
+                        }
+                    </div>
+                    <div class="b2b-branch-cards" role="list" aria-label="Sedes disponibles">
+                        @for (branch of b2bBranches(); track branch.id) {
                             <button
                                 type="button"
                                 class="b2b-branch-card"
@@ -459,14 +464,13 @@
                     <label>Nombre del negocio<input type="text" name="business" autocomplete="organization" required></label>
                     <label>Teléfono o WhatsApp<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
                     <label>Ciudad<input type="text" name="city" autocomplete="address-level2" required></label>
-                    <label class="b2b-form-full">Compra estimada
-                        <select name="volume" required>
-                            <option value="Compra ocasional">Compra ocasional</option>
-                            <option value="Compra semanal">Compra semanal</option>
-                            <option value="Compra quincenal">Compra quincenal</option>
-                            <option value="Compra mensual">Compra mensual</option>
-                        </select>
-                    </label>
+                    <fieldset class="b2b-form-full b2b-volume-options">
+                        <legend>Compra estimada</legend>
+                        <button type="button" [class.is-selected]="selectedB2bVolume() === 'Compra ocasional'" [attr.aria-pressed]="selectedB2bVolume() === 'Compra ocasional'" (click)="selectB2bVolume('Compra ocasional')">Compra ocasional</button>
+                        <button type="button" [class.is-selected]="selectedB2bVolume() === 'Compra semanal'" [attr.aria-pressed]="selectedB2bVolume() === 'Compra semanal'" (click)="selectB2bVolume('Compra semanal')">Compra semanal</button>
+                        <button type="button" [class.is-selected]="selectedB2bVolume() === 'Compra quincenal'" [attr.aria-pressed]="selectedB2bVolume() === 'Compra quincenal'" (click)="selectB2bVolume('Compra quincenal')">Compra quincenal</button>
+                        <button type="button" [class.is-selected]="selectedB2bVolume() === 'Compra mensual'" [attr.aria-pressed]="selectedB2bVolume() === 'Compra mensual'" (click)="selectB2bVolume('Compra mensual')">Compra mensual</button>
+                    </fieldset>
                     <label class="b2b-form-full">¿Qué productos buscas?<textarea name="details" rows="3" placeholder="Cuéntanos qué tipo de carnes, hamburguesas o productos necesitas."></textarea></label>
                     <button type="submit" class="theme-btn b2b-submit">Enviar por WhatsApp <i class="fa-brands fa-whatsapp" aria-hidden="true"></i></button>
                 </form>

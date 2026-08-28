@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, HostListener, inject, signal } from '@angular/core';
+import { Component, HostListener, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { BranchService } from '../../services/branch.service';
 
@@ -13,8 +13,13 @@ export class HomeComponent {
   private readonly document = inject(DOCUMENT);
   private readonly branchService = inject(BranchService);
   readonly b2bModalOpen = signal(false);
-  readonly b2bBranches = this.branchService.branches.filter((branch) => branch.whatsApp);
-  readonly selectedB2bBranchId = signal(this.b2bBranches[0]?.id ?? '');
+  readonly b2bDepartments = this.branchService.departments;
+  readonly selectedB2bDepartment = signal(this.b2bDepartments[0]?.name ?? '');
+  readonly b2bBranches = computed(() =>
+    this.branchService.branches.filter((branch) => branch.department === this.selectedB2bDepartment() && branch.primaryPhone.isMobile),
+  );
+  readonly selectedB2bBranchId = signal(this.b2bBranches()[0]?.id ?? '');
+  readonly selectedB2bVolume = signal('Compra ocasional');
   readonly menuHighlights = [
     { name: 'Lomito fino', description: 'Uno de los cortes presentes en la carta pública de Mercagán.', image: 'assets/img/dishes/dishes2_1.png', delay: '0.2s' },
     { name: 'Carne oreada', description: 'Preparación vinculada a la tradición gastronómica de Santander.', image: 'assets/img/dishes/dishes2_2.png', delay: '0.3s' },
@@ -36,6 +41,15 @@ export class HomeComponent {
     this.selectedB2bBranchId.set(id);
   }
 
+  selectB2bDepartment(department: string): void {
+    this.selectedB2bDepartment.set(department);
+    this.selectedB2bBranchId.set(this.b2bBranches()[0]?.id ?? '');
+  }
+
+  selectB2bVolume(volume: string): void {
+    this.selectedB2bVolume.set(volume);
+  }
+
   @HostListener('document:keydown.escape')
   closeB2bModalWithEscape(): void {
     this.closeB2bModal();
@@ -45,9 +59,10 @@ export class HomeComponent {
     event.preventDefault();
     const form = event.currentTarget as HTMLFormElement;
     const data = new FormData(form);
-    const branch = this.b2bBranches.find((item) => item.id === this.selectedB2bBranchId());
+    const branch = this.b2bBranches().find((item) => item.id === this.selectedB2bBranchId());
 
-    if (!branch?.whatsApp) return;
+    const phone = branch?.whatsApp ?? branch?.primaryPhone;
+    if (!branch || !phone) return;
 
     const message = [
       'Hola, quiero solicitar información comercial para mi negocio.',
@@ -56,10 +71,10 @@ export class HomeComponent {
       `Negocio: ${data.get('business')}`,
       `Teléfono: ${data.get('phone')}`,
       `Ciudad: ${data.get('city')}`,
-      `Compra estimada: ${data.get('volume')}`,
+      `Compra estimada: ${this.selectedB2bVolume()}`,
       data.get('details') ? `Información adicional: ${data.get('details')}` : '',
     ].filter(Boolean).join('\n');
-    const url = `https://wa.me/57${branch.whatsApp.value}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/57${phone.value}?text=${encodeURIComponent(message)}`;
 
     this.document.defaultView?.open(url, '_blank', 'noopener,noreferrer');
     this.closeB2bModal();

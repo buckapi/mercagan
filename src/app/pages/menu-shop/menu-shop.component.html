@@ -12,7 +12,7 @@
                         </span>
                         <span class="selected-location-change">Cambiar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
                     </button>
-                    <p class="ribbon-result-count">Mostrando 1 - 12 de 30 resultados</p>
+                    <p class="ribbon-result-count">{{ resultSummary() }}</p>
                     <div class="ribbon-view-selector" role="group" aria-label="Vista de productos">
                         <button type="button" [class.is-active]="productView() === 'grid'" [attr.aria-pressed]="productView() === 'grid'" aria-label="Vista en cuadrícula" (click)="productView.set('grid')"><i class="fa-solid fa-grid" aria-hidden="true"></i></button>
                         <button type="button" [class.is-active]="productView() === 'list'" [attr.aria-pressed]="productView() === 'list'" aria-label="Vista en lista" (click)="productView.set('list')"><i class="fa-solid fa-list" aria-hidden="true"></i></button>
@@ -53,7 +53,7 @@
                 </div>
                 <nav class="mobile-category-carousel" aria-label="Categorías del menú">
                     @for (category of categories(); track category) {
-                        <button type="button" [class.is-active]="selectedCategory() === category" (click)="selectedCategory.set(category)">{{ category }}</button>
+                        <button type="button" [class.is-active]="selectedCategory() === category" (click)="setCategory(category)">{{ category }}</button>
                     }
                 </nav>
                 <div class="row">
@@ -85,7 +85,7 @@
                                 </h5>
                                 <ul class="tagcloud">
                                     @for (category of categories(); track category) {
-                                        <li><button type="button" [class.is-active]="selectedCategory() === category" (click)="selectedCategory.set(category); closeFilters()">{{ category }}</button></li>
+                                        <li><button type="button" [class.is-active]="selectedCategory() === category" (click)="setCategory(category); closeFilters()">{{ category }}</button></li>
                                     }
                                 </ul>
                             </div>
@@ -186,7 +186,7 @@
                         <div class="sort-bar">
                             <div class="row g-sm-0 gy-20 justify-content-between align-items-center">
                                 <div class="col-md">
-                                    <p class="woocommerce-result-count">Mostrando 1 - 12 de 30 resultados</p>
+                                    <p class="woocommerce-result-count">{{ resultSummary() }}</p>
                                 </div>
 
                                 <div class="col-md-auto">
@@ -223,7 +223,7 @@
                             <div class="tab-pane fade" [class.show]="productView() === 'grid'" [class.active]="productView() === 'grid'" id="pills-grid" role="tabpanel"
                                 aria-labelledby="pills-grid-tab" tabindex="0">
                                 <ng-template #productCards>
-                                    @for (product of visibleProducts(); track product.id) {
+                                    @for (product of paginatedProducts(); track product.id) {
                                         <div class="dishes-card style2 wow fadeInUp product-card-enter" [class.is-in-cart]="(productQuantities()[product.id] ?? 0) > 0" [attr.data-wow-delay]="product.delay" [style.--product-delay]="product.delay">
                                             <div class="dishes-thumb">
                                                 <img [src]="product.image" [alt]="product.name">
@@ -265,7 +265,7 @@
                             <div class="tab-pane fade" [class.show]="productView() === 'list'" [class.active]="productView() === 'list'" id="pills-list" role="tabpanel" aria-labelledby="pills-list-tab"
                                 tabindex="0">
                                 <div class="dishes-card-wrap style3">
-                                    @for (product of visibleProducts(); track product.id) {
+                                    @for (product of paginatedProducts(); track product.id) {
                                         <div class="dishes-card style4" [class.is-in-cart]="(productQuantities()[product.id] ?? 0) > 0">
                                             <div class="dishes-thumb">
                                                 <img [src]="product.image" [alt]="product.name">
@@ -438,18 +438,19 @@
                         </div>
 
 
-                        <div class="page-nav-wrap text-center">
-                            <ul>
-                                <li><a class="previous" routerLink="/menu"><i
-                                            class="fa-sharp fa-light fa-arrow-left-long"></i></a></li>
-                                <li><a class="page-numbers" routerLink="/menu">1</a></li>
-                                <li><a class="page-numbers active" routerLink="/menu">2</a></li>
-                                <li><a class="page-numbers" routerLink="/menu">3</a></li>
-                                <li><a class="page-numbers" routerLink="/menu">...</a></li>
-                                <li><a class="next" routerLink="/menu"><i
-                                            class="fa-sharp fa-light fa-arrow-right-long"></i></a></li>
-                            </ul>
-                        </div>
+                        @if (totalPages() > 1) {
+                            <div class="page-nav-wrap text-center" aria-label="Paginación de productos">
+                                <ul>
+                                    <li><a class="previous" href="#" [class.is-disabled]="currentPage() === 1" [attr.aria-disabled]="currentPage() === 1" aria-label="Página anterior" (click)="$event.preventDefault(); goToPage(currentPage() - 1)"><i
+                                                class="fa-sharp fa-light fa-arrow-left-long"></i></a></li>
+                                    @for (page of pageNumbers(); track page) {
+                                        <li><a class="page-numbers" href="#" [class.active]="currentPage() === page" [attr.aria-current]="currentPage() === page ? 'page' : null" (click)="$event.preventDefault(); goToPage(page)">{{ page }}</a></li>
+                                    }
+                                    <li><a class="next" href="#" [class.is-disabled]="currentPage() === totalPages()" [attr.aria-disabled]="currentPage() === totalPages()" aria-label="Página siguiente" (click)="$event.preventDefault(); goToPage(currentPage() + 1)"><i
+                                                class="fa-sharp fa-light fa-arrow-right-long"></i></a></li>
+                                </ul>
+                            </div>
+                        }
                     </div>
                 </div>
                 <button type="button" class="mobile-filters-overlay" [class.is-open]="filtersOpen()" aria-label="Cerrar filtros" (click)="closeFilters()"></button>
