@@ -5,6 +5,13 @@
 <app-search-modal />
 <router-outlet />
 <app-mobile-bottom-nav />
+@if (pwaUpdateService.updateAvailable()) {
+  <aside class="pwa-update-notice" role="status" aria-live="polite">
+    <i class="fa-solid fa-arrow-rotate-right" aria-hidden="true"></i>
+    <span>Hay una nueva versión de Mercagán disponible.</span>
+    <button type="button" (click)="pwaUpdateService.installUpdate()">Actualizar</button>
+  </aside>
+}
 @if (showFooter) {
   <app-footer />
 }

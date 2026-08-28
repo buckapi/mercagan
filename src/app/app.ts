@@ -9,6 +9,7 @@ import { PreloaderComponent } from './components/preloader/preloader.component';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterScrollService } from './services/router-scroll.service';
+import { PwaUpdateService } from './services/pwa-update.service';
 
 @Component({
   selector: 'app-root',
@@ -29,6 +30,7 @@ import { RouterScrollService } from './services/router-scroll.service';
 export class App implements AfterViewInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly routerScrollService = inject(RouterScrollService);
+  readonly pwaUpdateService = inject(PwaUpdateService);
   private readonly deferredScripts = [
     'jquery.waypoints.js',
     'jquery.counterup.min.js',

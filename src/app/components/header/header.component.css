@@ -110,6 +110,7 @@
 
 .header-main .header-right .header__cart > a::before { content: attr(data-cart-count); }
 .header-main .header-right .header__cart > a[data-cart-count="0"]::before { display: none; }
+.header-main .header-right .header__cart.is-closed .header__right__dropdown__wrapper { visibility: hidden; opacity: 0; pointer-events: none; }
 .header-main .header-right .search-icon { padding: 0; border: 0; background: transparent; }
 .header__phone { position: relative; display: flex; align-items: center; }
 .header__phone > button { padding: 15px 8px; border: 0; background: transparent; color: var(--text); font-size: 18px; }

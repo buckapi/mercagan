@@ -21,6 +21,7 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   readonly mobileMenuOpen = signal(false);
   readonly phoneDirectoryOpen = signal(false);
+  readonly cartDropdownClosed = signal(false);
 
   toggleMobileMenu(): void {
     this.mobileMenuOpen.update((open) => !open);
@@ -49,6 +50,14 @@ export class HeaderComponent {
 
   openSearch(): void {
     this.searchService.open();
+  }
+
+  reopenCartDropdown(): void {
+    this.cartDropdownClosed.set(false);
+  }
+
+  closeCartDropdown(): void {
+    this.cartDropdownClosed.set(true);
   }
 
   removeFromCart(product: MenuProduct): void {

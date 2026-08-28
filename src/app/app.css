@@ -1,4 +1,27 @@
+ .pwa-update-notice {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100001;
+  display: flex;
+  max-width: min(24rem, calc(100vw - 2rem));
+  padding: .85rem;
+  align-items: center;
+  gap: .65rem;
+  border-radius: .75rem;
+  background: #1b1b1b;
+  box-shadow: 0 .75rem 2rem rgb(0 0 0 / 25%);
+  color: #fff;
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+.pwa-update-notice i { color: #fffe04; }
+.pwa-update-notice button { border: 0; border-radius: .45rem; background: #fffe04; color: #1b1b1b; font: inherit; font-weight: 800; padding: .45rem .65rem; }
+
 @media (max-width: 767px) {
+  .pwa-update-notice { right: .75rem; bottom: calc(5.25rem + env(safe-area-inset-bottom)); left: .75rem; max-width: none; }
+
   :host {
     display: block;
     padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));

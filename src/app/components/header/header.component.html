@@ -102,7 +102,7 @@
                                         }
                                     </div>
 
-                                    <div class="header__cart">
+                                    <div class="header__cart" [class.is-closed]="cartDropdownClosed()" (mouseenter)="reopenCartDropdown()">
                                         <a routerLink="/cart" [attr.data-cart-count]="cartService.totalItems()" [attr.aria-label]="'Abrir carrito, ' + cartService.totalItems() + (cartService.totalItems() === 1 ? ' producto' : ' productos')"> <i class="fa-sharp fa-regular fa-cart-shopping"></i> </a>
                                         <div class="header__right__dropdown__wrapper">
                                             @if (cartService.items().length === 0) {
@@ -130,8 +130,8 @@
                                                 </div>
                                                 <p class="dropdown__price">Total: <span>{{ formatCop(cartService.total()) }}</span></p>
                                                 <div class="header__right__dropdown__button">
-                                                    <a routerLink="/cart" class="theme-btn mb-2">Ver carrito ({{ cartService.totalItems() }})</a>
-                                                    <a routerLink="/checkout" class="theme-btn style3">Finalizar pedido</a>
+                                                    <a routerLink="/cart" class="theme-btn mb-2" (click)="closeCartDropdown()">Ver carrito ({{ cartService.totalItems() }})</a>
+                                                    <a routerLink="/checkout" class="theme-btn style3" (click)="closeCartDropdown()">Finalizar pedido</a>
                                                 </div>
                                             }
                                         </div>
