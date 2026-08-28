@@ -45,7 +45,7 @@ export class App implements AfterViewInit, OnDestroy {
   private readonly scrollHandler = () => this.updateBackToTop();
 
   get showFooter(): boolean {
-    return !this.router.url.startsWith('/ubicaciones') && !this.router.url.startsWith('/menu');
+    return !this.router.url.startsWith('/ubicaciones') && !this.router.url.startsWith('/menu') && !this.router.url.startsWith('/login');
   }
 
   ngAfterViewInit(): void {
