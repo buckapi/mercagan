@@ -4,6 +4,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { BackToTopComponent } from './components/back-to-top/back-to-top.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
+import { MobileBottomNavComponent } from './components/mobile-bottom-nav/mobile-bottom-nav.component';
 import { PreloaderComponent } from './components/preloader/preloader.component';
 import { SearchModalComponent } from './components/search-modal/search-modal.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -15,6 +16,7 @@ import { RouterScrollService } from './services/router-scroll.service';
     BackToTopComponent,
     FooterComponent,
     HeaderComponent,
+    MobileBottomNavComponent,
     PreloaderComponent,
     RouterOutlet,
     SearchModalComponent,
