@@ -307,7 +307,7 @@
     </section>
 
     <!-- Cta section  S T A R T -->
-    <section class="cta-section style-white fix">
+    <section class="cta-section visitor-cta-section style-white fix">
       <div class="cta-wrapper style3">
         <div class="container">
           <div class="cta-wrap  section-padding pt-xl-0 pb-xl-0 style3">
@@ -329,34 +329,12 @@
               <div class="col-xl-6  d-flex align-items-center justify-content-center order-2 order-xl-1">
                 <div class="cta-content">
                   <h6 class="text-white wow fadeInUp" data-wow-delay="0.5s"><img class="me-1"
-                                                                                 src="assets/img/icon/titleIconWhite.svg" alt="icon">ELIGE TU SEDE<img
+                                                                                  src="assets/img/icon/titleIconWhite.svg" alt="icon">TU MENÚ A UN ESCANEO<img
                     class="ms-1" src="assets/img/icon/titleIconWhite.svg" alt="icon"></h6>
-                  <h3 class="wow fadeInUp" data-wow-delay="0.7s">Consulta el menú disponible cerca de ti</h3>
+                  <h3 class="wow fadeInUp" data-wow-delay="0.7s">Escanea y descubre<br>todo el sabor de Mercagán</h3>
+                  <p class="qr-instruction wow fadeInUp" data-wow-delay="0.8s">Apunta la cámara de tu celular al código QR y accede al menú de Mercagán.</p>
                   <div class="btn-wrapper d-md-flex align-items-center gap-2">
-                    <div class="btns">
-                      <a class="apple-btn wow fadeInUp" data-wow-delay="0.9s"
-                         routerLink="/menu">
-                        <div class="d-flex align-items-center   gap-2">
-                          <img src="assets/img/icon/appleStore.svg" alt="icon">
-                          <div>
-                            <span>Consultar</span>
-                            <h6>Ver menú</h6>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                    <div class="btns">
-                      <a class="google-btn wow fadeInUp" data-wow-delay="0.9s"
-                         routerLink="/ubicaciones">
-                        <div class="d-flex align-items-center  gap-2">
-                          <img src="assets/img/icon/playStore.svg" alt="icon">
-                          <div>
-                            <span>Encontrar</span>
-                            <h6>Ver sedes</h6>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
+                    <img class="qr-button-code wow fadeInUp" data-wow-delay="0.9s" src="assets/img/icon/qr.png" width="150" height="150" alt="Código QR para acceder al menú de Mercagán">
                   </div>
 
                 </div>
@@ -431,7 +409,7 @@
                                     para negocios y solicita información sobre nuestros productos cárnicos y
                                     hamburguesas.</p>
                                 <div class="d-flex flex-wrap gap-3 mt-4 wow fadeInUp" data-wow-delay="0.4s">
-                                    <a href="https://restaurantemercagan.com/contacto/" target="_blank" rel="noopener noreferrer" class="theme-btn style5">IR A B2B <i class="fa-sharp fa-regular fa-arrow-right"></i></a>
+                                    <button type="button" class="theme-btn style5" (click)="openB2bModal()">IR A B2B <i class="fa-sharp fa-regular fa-arrow-right"></i></button>
                                     <a routerLink="/menu" class="theme-btn">VER MENÚ <i class="fa-sharp fa-regular fa-arrow-right"></i></a>
                                 </div>
                             </div>
@@ -450,3 +428,48 @@
             </div>
         </div>
     </section>
+
+    @if (b2bModalOpen()) {
+        <div class="b2b-modal-backdrop" role="presentation" (click)="$event.target === $event.currentTarget && closeB2bModal()">
+            <section class="b2b-modal" role="dialog" aria-modal="true" aria-labelledby="b2b-modal-title" aria-describedby="b2b-modal-description">
+                <button type="button" class="b2b-modal-close" aria-label="Cerrar formulario B2B" (click)="closeB2bModal()"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+                <div class="b2b-modal-intro">
+                    <p class="b2b-modal-eyebrow">COMPRAS PARA NEGOCIOS</p>
+                    <h2 id="b2b-modal-title">Hablemos de tu negocio</h2>
+                    <p id="b2b-modal-description">Cuéntanos qué necesitas y envía tu solicitud directamente al equipo de la sede que prefieras.</p>
+                    <p class="b2b-branch-label">Elige la sede que atenderá tu solicitud</p>
+                    <div class="b2b-branch-cards" role="list" aria-label="Sedes con WhatsApp disponible">
+                        @for (branch of b2bBranches; track branch.id) {
+                            <button
+                                type="button"
+                                class="b2b-branch-card"
+                                role="listitem"
+                                [class.is-selected]="selectedB2bBranchId() === branch.id"
+                                [attr.aria-pressed]="selectedB2bBranchId() === branch.id"
+                                (click)="selectB2bBranch(branch.id)">
+                                <img [src]="branch.image" [alt]="branch.name" loading="lazy">
+                                <span><strong>{{ branch.shortName }}</strong><small>{{ branch.city ?? branch.region }}</small></span>
+                                <i class="fa-solid fa-check" aria-hidden="true"></i>
+                            </button>
+                        }
+                    </div>
+                </div>
+                <form class="b2b-form" (submit)="submitB2b($event)">
+                    <label>Nombre completo<input type="text" name="name" autocomplete="name" required></label>
+                    <label>Nombre del negocio<input type="text" name="business" autocomplete="organization" required></label>
+                    <label>Teléfono o WhatsApp<input type="tel" name="phone" autocomplete="tel" inputmode="tel" required></label>
+                    <label>Ciudad<input type="text" name="city" autocomplete="address-level2" required></label>
+                    <label class="b2b-form-full">Compra estimada
+                        <select name="volume" required>
+                            <option value="Compra ocasional">Compra ocasional</option>
+                            <option value="Compra semanal">Compra semanal</option>
+                            <option value="Compra quincenal">Compra quincenal</option>
+                            <option value="Compra mensual">Compra mensual</option>
+                        </select>
+                    </label>
+                    <label class="b2b-form-full">¿Qué productos buscas?<textarea name="details" rows="3" placeholder="Cuéntanos qué tipo de carnes, hamburguesas o productos necesitas."></textarea></label>
+                    <button type="submit" class="theme-btn b2b-submit">Enviar por WhatsApp <i class="fa-brands fa-whatsapp" aria-hidden="true"></i></button>
+                </form>
+            </section>
+        </div>
+    }
