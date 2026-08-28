@@ -45,8 +45,10 @@ export class LocationsComponent {
 
   markerPosition(index: number): { left: number; top: number } { return this.markerPositions[index % this.markerPositions.length]; }
 
+  hasExactLocation(branch: Branch): boolean { return branch.latitude !== undefined && branch.longitude !== undefined; }
+
   directionsUrl(branch: Branch): string {
-    const destination = encodeURIComponent(`${branch.name}${branch.address ? `, ${branch.address}` : ''}`);
+    const destination = encodeURIComponent(`${branch.latitude},${branch.longitude}`);
     return `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving&dir_action=navigate`;
   }
 
