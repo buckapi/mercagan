@@ -15,7 +15,7 @@ import { formatCop, MenuProduct } from '../../models/menu.model';
 export class HeaderComponent {
   readonly formatCop = formatCop;
   readonly branchService = inject(BranchService);
-  readonly branchGroups = this.branchService.branchGroups;
+  readonly departments = this.branchService.departments;
   readonly cartService = inject(CartService);
   readonly searchService = inject(SearchService);
   private readonly router = inject(Router);

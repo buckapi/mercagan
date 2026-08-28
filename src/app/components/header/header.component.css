@@ -22,6 +22,65 @@
   outline: none;
 }
 
+.header-section-2 {
+  background-color: #fffe04;
+  background-image: url('/assets/img/papiro.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+
+.header-section-2 .header-2:not(.sticky) .mega-menu-wrapper {
+  background-color: transparent;
+  background-image: none;
+}
+
+.header-main .main-menu ul li .submenu.branch-menu {
+  display: grid;
+  width: max-content;
+  min-width: min(680px, calc(100vw - 2rem));
+  max-width: calc(100vw - 2rem);
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.header-main .main-menu ul li .submenu.branch-menu .branch-menu-department {
+  display: block;
+  min-width: 0;
+}
+
+.branch-menu-department-title,
+.branch-menu-region-title {
+  display: block;
+  font-weight: 800;
+}
+
+.branch-menu-department-title {
+  margin-bottom: .5rem;
+  color: var(--theme);
+  font-size: .9rem;
+  text-transform: uppercase;
+}
+
+.branch-menu-region-title {
+  margin: .6rem 0 .15rem;
+  color: var(--title);
+  font-size: .78rem;
+}
+
+.header-main .main-menu ul li .submenu.branch-menu .branch-menu-department button {
+  padding: .35rem 0;
+  border-bottom: 0;
+  font-size: .9rem;
+}
+
+@media (max-width: 767px) {
+  .header-main .main-menu ul li .submenu.branch-menu {
+    grid-template-columns: 1fr;
+  }
+}
+
 .header-main .sidebar__toggle {
   border: 0;
   background: transparent;

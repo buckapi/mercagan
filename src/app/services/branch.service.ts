@@ -1,11 +1,13 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject, signal } from '@angular/core';
-import { BRANCHES, Branch, BranchGroup } from '../models/branch.model';
+import { BRANCHES, Branch, BranchDepartment, BranchGroup, BranchRegion } from '../models/branch.model';
 
 @Injectable({ providedIn: 'root' })
 export class BranchService {
   readonly branches = BRANCHES;
+  /** Legacy visual grouping retained for callers that have not migrated yet. */
   readonly branchGroups: readonly BranchGroup[] = ['Bucaramanga y área metropolitana', 'Santander', 'Bogotá'];
+  readonly departments = this.createDepartments();
   private readonly storageKey = 'mercagan-selected-branch';
   private readonly storage = inject(DOCUMENT).defaultView?.localStorage;
   private readonly storedBranchId = this.readStoredBranchId();
@@ -72,6 +74,14 @@ export class BranchService {
     return this.branches.filter((branch) => branch.city === city);
   }
 
+  regionsByDepartment(department: string): readonly BranchRegion[] {
+    return this.departments.find((item) => item.name === department)?.regions ?? [];
+  }
+
+  departmentFor(branch: Branch): BranchDepartment | undefined {
+    return this.departments.find((department) => department.name === branch.department);
+  }
+
   private branchFor(id: string | null): Branch | undefined {
     return this.branches.find((branch) => branch.id === id);
   }
@@ -79,5 +89,41 @@ export class BranchService {
   private readStoredBranchId(): string | null {
     const id = this.storage?.getItem(this.storageKey) ?? null;
     return this.branchFor(id) ? id : null;
+  }
+
+  private createDepartments(): readonly BranchDepartment[] {
+    const departments: Array<{
+      name: string;
+      navigationName: string;
+      regions: Array<{ name: string; navigationName: string; branches: Branch[] }>;
+    }> = [];
+
+    for (const branch of this.branches) {
+      let department = departments.find((item) => item.name === branch.department);
+
+      if (!department) {
+        department = {
+          name: branch.department,
+          navigationName: branch.department === 'Bogotá D.C.' ? 'Bogotá' : branch.department,
+          regions: [],
+        };
+        departments.push(department);
+      }
+
+      let region = department.regions.find((item) => item.name === branch.region);
+
+      if (!region) {
+        region = {
+          name: branch.region,
+          navigationName: branch.region === 'Área Metropolitana de Bucaramanga' ? 'Área Metropolitana' : branch.region,
+          branches: [],
+        };
+        department.regions.push(region);
+      }
+
+      region.branches.push(branch);
+    }
+
+    return departments;
   }
 }

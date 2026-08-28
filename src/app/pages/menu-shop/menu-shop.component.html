@@ -8,7 +8,7 @@
                         <span class="selected-location-copy">
                             <small>Estás comprando en</small>
                             <strong>{{ branchService.selectedBranch().name }}</strong>
-                            <span>{{ branchService.selectedBranch().group }}</span>
+                            <span>{{ branchService.selectedBranch().region }}{{ branchService.selectedBranch().city ? ' · ' + branchService.selectedBranch().city : '' }}</span>
                         </span>
                         <span class="selected-location-change">Cambiar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
                     </button>
@@ -32,7 +32,7 @@
                         <span class="selected-location-copy">
                             <small>Estás comprando en</small>
                             <strong>{{ branchService.selectedBranch().name }}</strong>
-                            <span>{{ branchService.selectedBranch().group }}</span>
+                            <span>{{ branchService.selectedBranch().region }}{{ branchService.selectedBranch().city ? ' · ' + branchService.selectedBranch().city : '' }}</span>
                         </span>
                         <span class="selected-location-change">Cambiar <i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
                     </button>
@@ -500,29 +500,31 @@
 
                 <div class="location-divider"><span>o selecciona una sede</span></div>
                 <div class="branch-tabs" role="tablist" aria-label="Región de la sucursal">
-                    @for (group of branchGroups; track group) {
+                    @for (department of departments; track department.name) {
                         <button
                             type="button"
                             role="tab"
                             [id]="'branch-tab-' + $index"
-                            [attr.aria-selected]="activeBranchGroup() === group"
+                            [attr.aria-selected]="activeDepartment() === department.name"
                             [attr.aria-controls]="'branch-panel-' + $index"
-                            [class.is-active]="activeBranchGroup() === group"
-                            (click)="selectBranchGroup(group)">
-                            {{ group }}
+                            [class.is-active]="activeDepartment() === department.name"
+                            (click)="selectDepartment(department.name)">
+                            {{ department.navigationName }}
                         </button>
                     }
                 </div>
                 <div class="branch-card-list" aria-label="Sucursales disponibles">
-                    @for (group of branchGroups; track group) {
-                        @if (activeBranchGroup() === group) {
+                    @for (department of departments; track department.name) {
+                        @if (activeDepartment() === department.name) {
                             <section
                                 class="branch-card-group"
                                 role="tabpanel"
                                 [id]="'branch-panel-' + $index"
                                 [attr.aria-labelledby]="'branch-tab-' + $index">
                                 <div class="branch-card-grid">
-                                    @for (branch of branchesFor(group); track branch.id) {
+                                    @for (region of department.regions; track region.name) {
+                                    <h3 class="branch-region-heading">{{ region.navigationName }}</h3>
+                                    @for (branch of region.branches; track branch.id) {
                                     <button
                                         type="button"
                                         class="branch-card"
@@ -531,11 +533,12 @@
                                         (click)="chooseCandidate(branch.id)">
                                         <img class="branch-card-image" [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name" loading="lazy">
                                         <span class="branch-card-copy">
-                                            <strong>{{ branch.name }}</strong>
+                                            <strong>{{ branch.shortName }}</strong>
                                             @if (branch.address) { <small>{{ branch.address }}</small> }
                                         </span>
                                         <span class="branch-card-check"><i class="fa-solid fa-check" aria-hidden="true"></i></span>
                                     </button>
+                                    }
                                     }
                                 </div>
                             </section>

@@ -61,6 +61,15 @@
   margin: 0;
 }
 
+.branch-region-heading {
+  grid-column: 1 / -1;
+  margin: .75rem 0 -.25rem;
+  color: var(--theme, #eb0029);
+  font-size: .85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 @media (min-width: 1200px) {
   .offcanvas__wrapper .offcanvas__content .desktop-branch-selector .branch-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));

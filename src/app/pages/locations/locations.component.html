@@ -5,16 +5,16 @@
     <div class="container">
       <h2 id="locations-heading" class="visually-hidden">Sedes Mercagan</h2>
       <div class="location-tabs" role="tablist" aria-label="Grupos de sedes">
-        @for (group of groups; track group) {
+        @for (department of departments; track department.name) {
           <button
             type="button"
             role="tab"
             [id]="'tab-' + $index"
-            [attr.aria-selected]="activeGroup() === group"
+            [attr.aria-selected]="activeDepartment() === department.name"
             [attr.aria-controls]="'locations-panel-' + $index"
-            [class.is-active]="activeGroup() === group"
-            (click)="selectGroup(group)">
-            {{ group }}
+            [class.is-active]="activeDepartment() === department.name"
+            (click)="selectDepartment(department.name)">
+            {{ department.navigationName }}
           </button>
         }
       </div>
@@ -22,8 +22,8 @@
       <div
         class="locations-layout"
         role="tabpanel"
-        [id]="'locations-panel-' + groups.indexOf(activeGroup())"
-        [attr.aria-labelledby]="'tab-' + groups.indexOf(activeGroup())">
+        [id]="'locations-panel-' + activeDepartment()"
+        [attr.aria-labelledby]="'tab-' + activeDepartment()">
         <button type="button" class="map-fullscreen-trigger" aria-label="Abrir mapa en pantalla completa" (click)="openFullscreenMap()">
           <i class="fa-solid fa-expand" aria-hidden="true"></i>
           Pantalla completa
@@ -85,14 +85,14 @@
     <div class="map-fullscreen-shell">
       <div class="map-fullscreen-header">
         <div class="fullscreen-location-tabs" role="tablist" aria-label="Región de las sedes">
-          @for (group of groups; track group) {
+          @for (department of departments; track department.name) {
             <button
               type="button"
               role="tab"
-              [attr.aria-selected]="activeGroup() === group"
-              [class.is-active]="activeGroup() === group"
-              (click)="selectGroup(group)">
-              {{ group }}
+              [attr.aria-selected]="activeDepartment() === department.name"
+              [class.is-active]="activeDepartment() === department.name"
+              (click)="selectDepartment(department.name)">
+              {{ department.navigationName }}
             </button>
           }
         </div>

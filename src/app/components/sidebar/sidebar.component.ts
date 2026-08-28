@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Branch, BranchGroup } from '../../models/branch.model';
+import { Branch } from '../../models/branch.model';
 import { BranchService } from '../../services/branch.service';
 
 @Component({
@@ -14,15 +14,11 @@ import { BranchService } from '../../services/branch.service';
 export class SidebarComponent {
   readonly branchService = inject(BranchService);
   private readonly document = inject(DOCUMENT);
-  readonly branchGroups = this.branchService.branchGroups;
-  readonly activeBranchGroup = signal<BranchGroup>(this.branchService.selectedBranch().group);
+  readonly departments = this.branchService.departments;
+  readonly activeDepartment = signal(this.branchService.selectedBranch().department);
 
-  branchesFor(group: BranchGroup): readonly Branch[] {
-    return this.branchService.branchesFor(group);
-  }
-
-  selectBranchGroup(group: BranchGroup): void {
-    this.activeBranchGroup.set(group);
+  selectDepartment(department: string): void {
+    this.activeDepartment.set(department);
   }
 
   selectBranch(branch: Branch): void {

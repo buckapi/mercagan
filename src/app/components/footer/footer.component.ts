@@ -7,6 +7,7 @@ import { BranchService } from '../../services/branch.service';
   imports: [RouterLink],
   standalone: true,
   templateUrl: './footer.component.html',
+  styleUrl: './footer.component.css',
 })
 export class FooterComponent {
   readonly branchService = inject(BranchService);

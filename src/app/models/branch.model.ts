@@ -27,6 +27,7 @@ export interface BranchPhone {
 export interface Branch {
   id: string;
   name: string;
+  shortName: string;
   group: BranchGroup;
   department: string;
   region: string;
@@ -42,8 +43,22 @@ export interface Branch {
   whatsAppUrl?: string;
 }
 
+export interface BranchRegion {
+  name: string;
+  navigationName: string;
+  branches: readonly Branch[];
+}
+
+export interface BranchDepartment {
+  name: string;
+  navigationName: string;
+  regions: readonly BranchRegion[];
+}
+
 const createMapsUrl = (name: string, address?: string): string =>
-  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Mercagan ${name}${address ? `, ${address}` : ''}`)}`;
+  `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${name}${address ? `, ${address}` : ''}`)}`;
+
+const createShortName = (name: string): string => name.replace(/^Mercagán\s+/, '');
 
 const formatPhone = (value: string): string => `${value.slice(0, 3)} ${value.slice(3, 6)} ${value.slice(6)}`;
 
@@ -60,10 +75,11 @@ export const BRANCHES: readonly Branch[] = (branchesData as readonly BranchData[
 
   return {
     ...branch,
+    shortName: createShortName(branch.name),
     phones,
     primaryPhone: phones.find((phone) => phone.isMobile) ?? phones[0],
     whatsApp,
-    whatsAppUrl: whatsApp ? `https://wa.me/57${whatsApp.value}?text=${encodeURIComponent(`Hola, quisiera información sobre Mercagán ${branch.name}.`)}` : undefined,
+    whatsAppUrl: whatsApp ? `https://wa.me/57${whatsApp.value}?text=${encodeURIComponent(`Hola, quisiera información sobre ${branch.name}.`)}` : undefined,
     mapsUrl: createMapsUrl(branch.name, branch.address),
   };
 });

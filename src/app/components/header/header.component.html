@@ -62,15 +62,18 @@
                                                  
                                                     <li>
                                                         <a href="#" (click)="$event.preventDefault()">Sucursales <i class="fa-regular fa-plus"></i></a>
-                                                        <ul class="submenu">
-                                                            @for (group of branchGroups; track group) {
-                                                                <li>
-                                                                    <a href="#" (click)="$event.preventDefault()">{{ group }} <i class="fa-regular fa-plus"></i></a>
-                                                                    <ul class="submenu">
-                                                                        @for (branch of branchService.branchesFor(group); track branch.id) {
-                                                                            <li><button type="button" (click)="branchService.selectAndOpen(branch.id)">{{ branch.name }}</button></li>
+                                                        <ul class="submenu branch-menu">
+                                                            @for (department of departments; track department.name) {
+                                                                <li class="branch-menu-department">
+                                                                    <span class="branch-menu-department-title">{{ department.navigationName }}</span>
+                                                                    <div class="branch-menu-regions">
+                                                                        @for (region of department.regions; track region.name) {
+                                                                            <span class="branch-menu-region-title">{{ region.navigationName }}</span>
+                                                                            @for (branch of region.branches; track branch.id) {
+                                                                                <button type="button" (click)="branchService.selectAndOpen(branch.id)">{{ branch.shortName }}</button>
+                                                                            }
                                                                         }
-                                                                    </ul>
+                                                                    </div>
                                                                 </li>
                                                             }
                                                         </ul>
@@ -89,7 +92,7 @@
                                         <button type="button" [attr.aria-expanded]="phoneDirectoryOpen()" aria-controls="header-phone-directory" aria-label="Ver teléfonos de la sede seleccionada" (click)="openPhoneDirectory()"><i class="fa-solid fa-phone" aria-hidden="true"></i></button>
                                         @if (phoneDirectoryOpen()) {
                                             <section id="header-phone-directory" class="header-phone-directory" aria-label="Teléfonos de la sede seleccionada">
-                                                <p>Mercagán {{ branchService.selectedBranch().name }}</p>
+                                                <p>{{ branchService.selectedBranch().name }}</p>
                                                 @for (phone of branchService.selectedBranch().phones; track phone.value) {
                                                     <a [href]="phone.telHref" [attr.aria-label]="'Llamar a Mercagán ' + branchService.selectedBranch().name + ' al ' + phone.display"><i class="fa-solid fa-phone" aria-hidden="true"></i>{{ phone.display }}</a>
                                                 }

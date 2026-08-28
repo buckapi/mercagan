@@ -19,23 +19,25 @@
                 @if (!branchService.showDetails()) {
                 <section class="offcanvas-gallery-area desktop-branch-selector" aria-label="Sedes Mercagan">
                     <div class="sidebar-branch-tabs" role="tablist" aria-label="Región de las sedes">
-                        @for (group of branchGroups; track group) {
+                        @for (department of departments; track department.name) {
                             <button
                                 type="button"
                                 role="tab"
                                 [id]="'sidebar-branch-tab-' + $index"
-                                [attr.aria-selected]="activeBranchGroup() === group"
+                                [attr.aria-selected]="activeDepartment() === department.name"
                                 [attr.aria-controls]="'sidebar-branch-panel-' + $index"
-                                [class.is-active]="activeBranchGroup() === group"
-                                (click)="selectBranchGroup(group)">
-                                {{ group }}
+                                [class.is-active]="activeDepartment() === department.name"
+                                (click)="selectDepartment(department.name)">
+                                {{ department.navigationName }}
                             </button>
                         }
                     </div>
-                    @for (group of branchGroups; track group) {
-                        @if (activeBranchGroup() === group) {
+                    @for (department of departments; track department.name) {
+                        @if (activeDepartment() === department.name) {
                             <div class="offcanvas-gallery-items branch-grid" role="tabpanel" [id]="'sidebar-branch-panel-' + $index" [attr.aria-labelledby]="'sidebar-branch-tab-' + $index">
-                                @for (branch of branchesFor(group); track branch.id) {
+                                @for (region of department.regions; track region.name) {
+                                    <h3 class="branch-region-heading">{{ region.navigationName }}</h3>
+                                    @for (branch of region.branches; track branch.id) {
                                     <button
                                         type="button"
                                         class="offcanvas-image branch-image"
@@ -46,8 +48,9 @@
                                         (mouseenter)="selectBranch(branch)"
                                         (focus)="selectBranch(branch)">
                                         <img [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name">
-                                        <span>{{ branch.name }}</span>
+                                        <span>{{ branch.shortName }}</span>
                                     </button>
+                                    }
                                 }
                             </div>
                         }
@@ -56,23 +59,25 @@
 
                 <section class="offcanvas-gallery-area mobile-branch-selector" aria-label="Sedes Mercagan">
                     <div class="sidebar-branch-tabs" role="tablist" aria-label="Región de las sedes">
-                        @for (group of branchGroups; track group) {
+                        @for (department of departments; track department.name) {
                             <button
                                 type="button"
                                 role="tab"
                                 [id]="'sidebar-mobile-branch-tab-' + $index"
-                                [attr.aria-selected]="activeBranchGroup() === group"
+                                [attr.aria-selected]="activeDepartment() === department.name"
                                 [attr.aria-controls]="'sidebar-mobile-branch-panel-' + $index"
-                                [class.is-active]="activeBranchGroup() === group"
-                                (click)="selectBranchGroup(group)">
-                                {{ group }}
+                                [class.is-active]="activeDepartment() === department.name"
+                                (click)="selectDepartment(department.name)">
+                                {{ department.navigationName }}
                             </button>
                         }
                     </div>
-                    @for (group of branchGroups; track group) {
-                        @if (activeBranchGroup() === group) {
+                    @for (department of departments; track department.name) {
+                        @if (activeDepartment() === department.name) {
                             <div class="offcanvas-gallery-items branch-grid" role="tabpanel" [id]="'sidebar-mobile-branch-panel-' + $index" [attr.aria-labelledby]="'sidebar-mobile-branch-tab-' + $index">
-                                @for (branch of branchesFor(group); track branch.id) {
+                                @for (region of department.regions; track region.name) {
+                                    <h3 class="branch-region-heading">{{ region.navigationName }}</h3>
+                                    @for (branch of region.branches; track branch.id) {
                                     <button
                                         type="button"
                                         class="offcanvas-image branch-image"
@@ -81,8 +86,9 @@
                                         [attr.aria-label]="'Seleccionar sede ' + branch.name"
                                         (click)="showBranchDetails(branch)">
                                         <img [src]="branch.image" [alt]="'Sede Mercagan ' + branch.name">
-                                        <span>{{ branch.name }}</span>
+                                        <span>{{ branch.shortName }}</span>
                                     </button>
+                                    }
                                 }
                             </div>
                         }
@@ -108,7 +114,7 @@
                             </div>
                             <div class="offcanvas__contact-text">
                                 <strong>{{ branchService.selectedBranch().name }}</strong>
-                                <span>{{ branchService.selectedBranch().group }}</span>
+                                <span>{{ branchService.selectedBranch().region }}{{ branchService.selectedBranch().city ? ' · ' + branchService.selectedBranch().city : '' }}</span>
                                 @if (branchService.selectedBranch().address) { <span>{{ branchService.selectedBranch().address }}</span> }
                             </div>
                         </li>

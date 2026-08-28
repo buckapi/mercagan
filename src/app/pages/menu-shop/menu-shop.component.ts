@@ -1,7 +1,7 @@
 import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectorRef, Component, HostListener, computed, effect, inject, signal, untracked } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Branch, BranchGroup } from '../../models/branch.model';
+import { Branch } from '../../models/branch.model';
 import { BranchService } from '../../services/branch.service';
 import { CartService } from '../../services/cart.service';
 import { formatCop, MenuCategory, MenuProduct } from '../../models/menu.model';
@@ -32,8 +32,8 @@ export class MenuShopComponent {
   readonly locating = signal(false);
   readonly locationError = signal('');
   readonly candidateBranchId = signal(this.branchService.selectedBranch().id);
-  readonly branchGroups = this.branchService.branchGroups;
-  readonly activeBranchGroup = signal<BranchGroup>(this.branchService.selectedBranch().group);
+  readonly departments = this.branchService.departments;
+  readonly activeDepartment = signal(this.branchService.selectedBranch().department);
   readonly quickViewProduct = signal<MenuProduct | null>(null);
   readonly productQuantities = computed(() =>
     Object.fromEntries(this.cartService.items().map((item) => [item.product.id, item.quantity])),
@@ -139,14 +139,10 @@ export class MenuShopComponent {
     this.selectedCategory.set((event.target as HTMLSelectElement).value);
   }
 
-  branchesFor(group: BranchGroup): readonly Branch[] {
-    return this.branchService.branchesFor(group);
-  }
-
   openLocationModal(): void {
     const selectedBranch = this.branchService.selectedBranch();
     this.candidateBranchId.set(selectedBranch.id);
-    this.activeBranchGroup.set(selectedBranch.group);
+    this.activeDepartment.set(selectedBranch.department);
     this.locationError.set('');
     this.locationModalOpen.set(true);
   }
@@ -160,12 +156,12 @@ export class MenuShopComponent {
     this.cdr.detectChanges();
   }
 
-  selectBranchGroup(group: BranchGroup): void {
-    this.activeBranchGroup.set(group);
+  selectDepartment(department: string): void {
+    this.activeDepartment.set(department);
     const currentCandidate = this.branchService.branches.find((branch) => branch.id === this.candidateBranchId());
 
-    if (currentCandidate?.group !== group) {
-      const firstBranch = this.branchesFor(group)[0];
+    if (currentCandidate?.department !== department) {
+      const firstBranch = this.branchService.branchesByDepartment(department)[0];
       if (firstBranch) this.candidateBranchId.set(firstBranch.id);
     }
   }
@@ -193,7 +189,7 @@ export class MenuShopComponent {
       ({ coords }) => {
         const nearest = this.findNearestBranch(coords.latitude, coords.longitude);
         this.candidateBranchId.set(nearest.id);
-        this.activeBranchGroup.set(nearest.group);
+        this.activeDepartment.set(nearest.department);
         this.branchService.select(nearest);
         this.locating.set(false);
         this.locationModalOpen.set(false);

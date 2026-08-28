@@ -1,0 +1,14 @@
+.footer-social-icons {
+  display: flex;
+  gap: .75rem;
+}
+
+.footer-social-icons > span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 35%);
+  border-radius: 50%;
+  color: #fff;
+}
