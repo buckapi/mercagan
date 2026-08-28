@@ -1,7 +1,7 @@
     <!-- Banner Section   S T A R T -->
     <section class="banner-section fix">
         <div class="slider-area">
-            <div class="swiper banner2-slider">
+            <div #bannerSlider class="swiper banner2-slider">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="banner-wrapper style2 bg-img">
@@ -97,7 +97,7 @@
                                         <div class="col-12 col-xxl-6 banner-image-column">
                                             <div class="banner-thumb-area" data-tilt data-animation="slideInRight"
                                                 data-duration="2s" data-delay=".9s">
-                                                <img src="assets/img/banner/bannerThumb2_2.png" alt="shape">
+                                                <img class="banner-second-thumb" src="assets/img/banner/bannerThumb2_2.png" alt="shape">
                                             </div>
                                         </div>
                                     </div>
@@ -158,8 +158,8 @@
                     </div>
                 </div>
 
-                <div class="arrow-prev2"><img src="assets/img/icon/arrowPrev.svg" alt="Icon"></div>
-                <div class="arrow-next2"><img src="assets/img/icon/arrowNext.svg" alt="Icon"></div>
+                <button type="button" class="arrow-prev2" aria-label="Banner anterior"><img src="assets/img/icon/arrowPrev.svg" alt=""></button>
+                <button type="button" class="arrow-next2" aria-label="Banner siguiente"><img src="assets/img/icon/arrowNext.svg" alt=""></button>
                 <div class="pagination-class2 swiper-pagination"></div>
             </div>
         </div>

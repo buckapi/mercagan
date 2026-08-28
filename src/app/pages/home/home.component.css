@@ -85,6 +85,10 @@
 }
 
 @media (min-width: 992px) {
+  .banner-second-thumb {
+    transform: translateX(-2rem);
+  }
+
   .banner-third-thumb {
     transform: translateX(-3rem);
   }
